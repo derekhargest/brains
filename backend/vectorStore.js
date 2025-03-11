@@ -46,13 +46,10 @@ const CACHE_TTL = 60 * 1000; // 1 minute
  */
 async function checkQdrantAvailability() {
   try {
-    // New health check endpoint
-    const response = await axios.get('http://localhost:6333');
-    console.log("Qdrant version:", response.data.version);
-    return true;
+    const response = await fetch(`${process.env.QDRANT_URL}/collections`);
+    return response.ok;
   } catch (error) {
-    console.error("Qdrant is not available:", error.message);
-    useInMemoryFallback = true;
+    console.error('Qdrant connection failed:', error.message);
     return false;
   }
 }
@@ -256,18 +253,33 @@ async function searchByTimePattern(pattern, limit = 10) {
  */
 async function advancedSearch(query, options = {}) {
   try {
+    // If query is empty and we're not doing a filtered search, 
+    // use scroll instead of vector search
+    if (!query.trim() && !options.filters) {
+      const response = await qdrantClient.scroll(COLLECTIONS.CORE, {
+        limit: options.limit || 10,
+        with_payload: true,
+        with_vectors: false
+      });
+      return response.points;
+    }
+
+    // For actual searches, create embedding and search
     const embedding = await createEmbedding(query);
     const { filters = {}, limit = 10, collection = COLLECTIONS.CORE } = options;
     
     // Build a filter based on the provided options
     const filter = buildFilterFromOptions(filters);
     
-    // Perform the search
-    return await qdrantClient.search(collection, {
+    // Perform the search with score threshold
+    const searchResults = await qdrantClient.search(collection, {
       vector: embedding,
       filter,
-      limit
+      limit,
+      score_threshold: options.minScore || 0.3 // Add minimum score threshold
     });
+
+    return searchResults;
   } catch (error) {
     console.error('Error performing advanced search:', error);
     throw error;
@@ -536,4 +548,38 @@ export {
   searchByTimePattern,
   optimizedSearch,
   COLLECTIONS
+};
+
+async function getMemory(id) {
+  // Implement memory retrieval
+  // This is a placeholder - implement according to your actual memory retrieval logic
+  // Retrieve memory from Qdrant...
+  return {
+    id,
+    content: 'Sample memory content',
+    type: 'general',
+    metadata: {},
+    timestamp: new Date().toISOString()
+  };
+}
+
+async function searchMemories(query, limit = 10) {
+  // Implement memory search
+  // This is a placeholder - implement according to your actual memory search logic
+  return [];
+}
+
+async function findSimilarMemories(id, limit = 5) {
+  // Implement similar memory search
+  // This is a placeholder - implement according to your actual similar memory search logic
+  return [];
+}
+
+// Single export statement at end of file
+export {
+  checkQdrantAvailability,
+  storeMemory,
+  getMemory,
+  searchMemories,
+  findSimilarMemories
 }; 

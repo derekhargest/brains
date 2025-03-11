@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brains!!! - Memory List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Brains!!! Memory System (MVP)</h1>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/memories.html" class="active">Memories</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <main class="memories-page">
+      <section class="all-memories">
+        <h2>All Memories</h2>
+        <div class="filter-controls">
+          <label>
+            Sort by:
+            <select id="sortMemories">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="importance">Importance</option>
+            </select>
+          </label>
+        </div>
+        <div id="memoriesList" class="memories-list">
+          <p>Loading memories...</p>
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <p>Brains!!! Memory System MVP - For development purposes only</p>
+    </footer>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const memoriesList = document.getElementById('memoriesList');
+      const sortSelector = document.getElementById('sortMemories');
+      
+      // Load all memories on page load
+      loadMemories();
+      
+      // Add sort event listener
+      sortSelector.addEventListener('change', loadMemories);
+      
+      async function loadMemories() {
+        try {
+          const response = await fetch('/api/memories');
+          const memories = await response.json();
+          
+          if (!memories || memories.length === 0) {
+            memoriesList.innerHTML = '<p>No memories found. Add some on the home page!</p>';
+            return;
+          }
+          
+          // Sort memories based on selected option
+          const sortType = sortSelector.value;
+          sortMemories(memories, sortType);
+          
+          // Display memories
+          memoriesList.innerHTML = '';
+          memories.forEach(memory => {
+            const memoryEl = document.createElement('div');
+            memoryEl.className = 'memory-item';
+            
+            const date = new Date(memory.timestamp).toLocaleString();
+            const importance = memory.metadata?.importance || 0;
+            
+            memoryEl.innerHTML = `
+              <div class="memory-header">
+                <span>${date}</span>
+                <span>Importance: ${importance.toFixed(1)}</span>
+              </div>
+              <div class="memory-content">${memory.content}</div>
+            `;
+            
+            memoriesList.appendChild(memoryEl);
+          });
+        } catch (error) {
+          console.error('Error loading memories:', error);
+          memoriesList.innerHTML = '<p>Error loading memories. Please try again later.</p>';
+        }
+      }
+      
+      function sortMemories(memories, sortType) {
+        switch (sortType) {
+          case 'newest':
+            memories.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            break;
+          case 'oldest':
+            memories.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            break;
+          case 'importance':
+            memories.sort((a, b) => {
+              const importanceA = a.metadata?.importance || 0;
+              const importanceB = b.metadata?.importance || 0;
+              return importanceB - importanceA;
+            });
+            break;
+        }
+      }
+    });
+  </script>
+</body>
+</html> 

@@ -45,6 +45,8 @@ import { InsightService } from './backend/services/insightService.js';
 import { LearningService } from './backend/services/learningService.js';
 import demoRoutes from './backend/routes/demoRoutes.js';
 import { registerDirectRoutes } from './backend/registerDirectRoutes.js';
+import healthRoutes from './backend/api/routes/healthRoutes.js';
+import logger from './backend/utils/logger.js';
 
 // Create __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -66,26 +68,47 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Test endpoint before other routes
+// Test endpoint
 app.get('/api/test-health', (req, res) => {
   res.json({ status: 'API working', timestamp: new Date().toISOString() });
 });
 
-// 1. API Routes FIRST - ALL API routes must be here
-app.use('/api/temporal', temporalRoutes);
-app.use('/api/system', systemRoutes);
-app.use('/api/entities', entityRoutes);
-app.use('/api/analysis', analysisRoutes);
-app.use('/api/graph', graphRoutes);
-app.use('/api/demo', demoRoutes);
-app.use('/api/test', testRoutes);  // MOVE THIS HERE, before static files
+// KEEP ONLY ESSENTIAL ROUTES
 app.use('/api/memories', memoryRoutes);
-// Any other API routes should be here too
+app.use('/api/test', testRoutes);
 
-// 2. Static files AFTER API routes
+// Remove all other routes:
+// app.use('/api/temporal', temporalRoutes);
+// app.use('/api/system', systemRoutes);
+// app.use('/api/entities', entityRoutes);
+// app.use('/api/analysis', analysisRoutes);
+// app.use('/api/graph', graphRoutes);
+// app.use('/api/demo', demoRoutes);
+
+// Add this right after your other API routes and before the static files middleware
+app.get('/api/health', async (req, res) => {
+  try {
+    // Check Qdrant availability
+    const qdrantAvailable = await checkQdrantAvailability();
+    
+    res.json({ 
+      status: 'ok', 
+      message: 'Brains!!! server is running', 
+      storageMode: qdrantAvailable ? 'qdrant' : 'in-memory-fallback',
+      timestamp: new Date().toISOString() 
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+});
+
+// Then your static files middleware
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// 3. SPA catch-all LAST
+// SPA catch-all
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
@@ -266,17 +289,6 @@ function generateFallbackResponse(message, relevantMemories) {
 }
 
 // API routes
-app.get('/api/health', async (req, res) => {
-  const qdrantAvailable = await checkQdrantAvailability();
-  res.json({ 
-    status: 'ok', 
-    message: 'Brains!!! server is running', 
-    storageMode: qdrantAvailable ? 'qdrant' : 'in-memory-fallback',
-    openAIKey: process.env.OPENAI_API_KEY ? 'configured' : 'missing',
-    timestamp: new Date().toISOString() 
-  });
-});
-
 app.post('/api/chat', async (req, res) => {
   try {
     const { message } = req.body;
@@ -541,25 +553,34 @@ app.delete('/api/wiki/:slug', (req, res) => {
 });
 
 // Set port and start server
-const BASE_PORT = 3002;
-const PORT = process.env.PORT || BASE_PORT;
+const PORT = process.env.PORT || 3001;
 
 const MAX_RETRIES = 3;
 let retryCount = 0;
 
 function startServerWithRetry() {
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server started on port ${PORT}`);
-}).on('error', (err) => {
+    console.log(`🧠 Brains!!! server running on port ${PORT}`);
+    console.log(`   Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`   Qdrant URL: ${process.env.QDRANT_URL || 'http://localhost:6333'}`);
+    serverStarted = true;
+    
+    // Run example code after server starts
+    setTimeout(() => {
+      runExampleCode().catch(err => {
+        console.error("Error running example code:", err);
+      });
+    }, 2000); // Wait 2 seconds to ensure everything is initialized
+  }).on('error', (err) => {
     if (retryCount < MAX_RETRIES) {
       console.log(`Retry ${retryCount + 1}/${MAX_RETRIES}`);
       retryCount++;
       setTimeout(startServerWithRetry, 1000);
-  } else {
+    } else {
       console.error('Failed to start after retries:', err);
       process.exit(1);
-  }
-});
+    }
+  });
 }
 
 // Replace existing startServer call with:
@@ -964,4 +985,18 @@ cron.schedule('0 4 * * *', async () => {
 cron.schedule('*/15 * * * *', async () => {
   await services.learningService.processRecentInteractions();
   console.log('Proactive learning cycle completed');
+});
+
+// Then register the routes (add this code to your server.js where you set up routes)
+app.use('/api/health', healthRoutes);
+app.use('/api/system', systemRoutes);
+app.use('/api/memory', memoryRoutes);
+
+// Static files should come AFTER API routes
+app.use(express.static('public'));
+
+// Add logging middleware for all requests
+app.use((req, res, next) => {
+  logger.info('HTTP', `${req.method} ${req.url}`);
+  next();
 });

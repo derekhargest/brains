@@ -3,125 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brains!!! - Testing Interface</title>
+  <title>Brains!!! - Memory System</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Brains!!! Testing Interface</h1>
+      <h1>Brains!!! Memory System (MVP)</h1>
       <nav class="main-nav">
         <ul>
           <li><a href="/" class="active">Home</a></li>
-          <li><a href="/wiki.html">Wiki</a></li>
-          <li><a href="/chat.html">Chat</a></li>
-          <li><a href="data-generator.html">Data Generator</a></li>
+          <li><a href="/memories.html">Memories</a></li>
         </ul>
       </nav>
     </header>
     
     <main>
-      <section class="chat-section">
-        <h2>Chat Testing</h2>
-        <div class="chat-container" id="chatMessages">
-          <!-- Chat messages will appear here -->
-        </div>
-        <div class="chat-input">
-          <textarea id="userInput" placeholder="Type your message here..."></textarea>
-          <button id="sendButton">Send</button>
+      <section class="memory-section">
+        <h2>Memory Storage</h2>
+        <div class="memory-form">
+          <textarea id="memoryContent" placeholder="Enter your memory here..."></textarea>
+          <div class="memory-metadata">
+            <label>
+              Importance: 
+              <input type="range" id="importanceSlider" min="0" max="1" step="0.1" value="0.5">
+              <span id="importanceValue">0.5</span>
+            </label>
+          </div>
+          <button id="storeMemoryBtn">Store Memory</button>
         </div>
       </section>
       
-      <section class="api-section">
-        <h2>API Testing</h2>
-        <div class="api-actions">
-          <button id="healthCheckBtn">Health Check</button>
-          <button id="extractMemoriesBtn">Extract Memories</button>
-          <button id="searchMemoriesBtn">Search Memories</button>
+      <section class="search-section">
+        <h2>Memory Search</h2>
+        <div class="search-form">
+          <input type="text" id="searchQuery" placeholder="Search your memories...">
+          <button id="searchBtn">Search</button>
         </div>
-        <div class="api-search" id="searchContainer" style="display: none;">
-          <input type="text" id="searchQuery" placeholder="Enter search query">
-          <button id="performSearchBtn">Search</button>
-        </div>
-        <div class="api-response">
-          <h3>Response:</h3>
-          <pre id="apiResponse">No response yet</pre>
-        </div>
+        <div id="searchResults" class="search-results"></div>
       </section>
     </main>
     
-    <!-- New Memory Statistics Dashboard -->
-    <section class="memory-stats">
-      <h2>Memory Statistics</h2>
-      <button id="refreshStatsBtn">Refresh Stats</button>
-      
-      <div class="stats-grid">
-        <div class="stats-card">
-          <h3>Overview</h3>
-          <div class="stat-item">
-            <span class="stat-label">Total Memories:</span>
-            <span class="stat-value" id="totalMemories">-</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Storage Mode:</span>
-            <span class="stat-value" id="storageMode">-</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Oldest Memory:</span>
-            <span class="stat-value" id="oldestMemory">-</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Newest Memory:</span>
-            <span class="stat-value" id="newestMemory">-</span>
-          </div>
-        </div>
-        
-        <div class="stats-card">
-          <h3>Memory Sources</h3>
-          <div id="sourceStats" class="stats-distribution">
-            <!-- Source distribution will be displayed here -->
-          </div>
-        </div>
-        
-        <div class="stats-card">
-          <h3>Memory Types</h3>
-          <div id="typeStats" class="stats-distribution">
-            <!-- Type distribution will be displayed here -->
-          </div>
-        </div>
-        
-        <div class="stats-card">
-          <h3>Importance Distribution</h3>
-          <div id="importanceStats" class="stats-distribution">
-            <!-- Importance distribution will be displayed here -->
-          </div>
-        </div>
-      </div>
-      
-      <div class="stats-card recent-memories">
-        <h3>Recent Memories</h3>
-        <div id="recentMemories" class="memory-list">
-          <!-- Recent memories will be displayed here -->
-        </div>
-      </div>
-    </section>
-    
-    <div class="memory-health-section">
-      <h2>Memory Health Dashboard</h2>
-      <div class="chart-container">
-        <canvas id="memoryHealthChart"></canvas>
-      </div>
-      <button onclick="memoryDashboard.refresh()">Refresh</button>
-    </div>
-    
-    <div class="insight-section">
-      <h2>Cross-Memory Insights</h2>
-      <div id="insightNetwork" style="height: 600px;"></div>
-      <button onclick="insightNetwork.refresh()">Refresh Insights</button>
-    </div>
-    
     <footer>
-      <p>Brains!!! Testing Interface - For development purposes only</p>
+      <p>Brains!!! Memory System MVP - For development purposes only</p>
     </footer>
   </div>
   

@@ -15,16 +15,15 @@ const pool = new Pool({
 async function initDatabase() {
   try {
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS tasks (
+      CREATE TABLE IF NOT EXISTS memories (
         id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
+        content VARCHAR(255) NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        status VARCHAR(50) DEFAULT 'pending',
-        data JSONB
+        metadata JSONB DEFAULT '{}'
       );
     `);
-    console.log('Database initialized successfully');
+    console.log('Database initialized with simplified schema');
     return true;
   } catch (error) {
     console.error('Error initializing database:', error);
