@@ -11,7 +11,7 @@ const initializeServices = async () => {
     const vectorStore = new QdrantVectorStore({
       baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
       collectionName: 'memories',
-      vectorSize: 384
+      vectorSize: 384  // Keep consistent with existing collection
     });
     
     await vectorStore.initialize();

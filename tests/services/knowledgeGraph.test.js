@@ -1,3 +1,5 @@
+import { KnowledgeGraph } from '../../backend/services/knowledgeGraph.js';
+
 describe('KnowledgeGraph Reflection Integration', () => {
   const kg = new KnowledgeGraph();
   

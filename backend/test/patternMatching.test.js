@@ -2,6 +2,8 @@ import { config } from 'dotenv';
 import { describe, test, expect } from './testUtils.js';
 import { PatternLearner } from '../patternMatching/patternLearner.js';
 import assert from 'assert';
+import { TfIdf } from 'natural';
+import { PatternMatcher } from '../patternMatching/patternMatcher.js';
 
 config();
 
@@ -96,6 +98,48 @@ describe('Pattern Matching Tests', () => {
     assert(codeOrAi, 'Expected to find AI or coding concept');
     assert(codeOrAi.relatedConcepts.length > 0, 
            'Expected to find related concepts');
+  });
+
+  let matcher;
+
+  beforeEach(() => {
+    matcher = new PatternMatcher();
+  });
+
+  test('should detect repetition patterns', () => {
+    const text = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
+    const patterns = matcher.findRepetitions(text);
+    
+    assert(Array.isArray(patterns));
+    assert(patterns.length > 0);
+    assert(patterns[0].type === 'repetition');
+  });
+
+  test('should detect sequence patterns', () => {
+    const text = "First, mix the ingredients. Second, pour the batter. Finally, bake for 30 minutes.";
+    const patterns = matcher.findSequences(text);
+    
+    assert(Array.isArray(patterns));
+    assert(patterns.length > 0);
+    assert(patterns[0].type === 'sequence');
+  });
+
+  test('should calculate pattern confidence', () => {
+    const pattern = {
+      type: 'repetition',
+      matches: ['test', 'test', 'test'],
+      context: 'test test test in a sentence'
+    };
+    
+    const confidence = matcher.calculateConfidence(pattern);
+    assert(typeof confidence === 'number');
+    assert(confidence >= 0 && confidence <= 1);
+  });
+
+  test('should handle empty input', () => {
+    const patterns = matcher.findPatterns('');
+    assert(Array.isArray(patterns));
+    assert(patterns.length === 0);
   });
 });
 

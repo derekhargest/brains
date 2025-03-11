@@ -155,7 +155,7 @@ async function initializeServices() {
     const vectorStore = new QdrantVectorStore({
       baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
       collectionName: 'memories',
-      vectorSize: 384
+      vectorSize: 1536  // OpenAI's text-embedding-3-large size
     });
     
     // Initialize the vector store first

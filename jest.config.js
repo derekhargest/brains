@@ -1,13 +1,26 @@
+/** @type {import('jest').Config} */
 export default {
   testEnvironment: 'node',
-  transform: {},
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+  transform: {
+    '^.+\\.js$': ['babel-jest', { 
+      presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+      plugins: ['@babel/plugin-transform-runtime']
+    }]
   },
+  moduleFileExtensions: ['js', 'json', 'node'],
   testMatch: [
-    '**/test/**/*.test.js',
-    '**/tests/**/*.test.js'
+    '**/tests/**/*.test.js',
+    '**/backend/test/**/*.test.js'
   ],
   verbose: true,
-  testTimeout: 10000
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1.js'
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@babel/runtime)/)'
+  ],
+  testEnvironmentOptions: {
+    url: 'http://localhost'
+  }
 }; 

@@ -175,8 +175,8 @@ async function populateDummyData() {
     console.log('Initializing vector store...');
     vectorStore = new QdrantVectorStore({
       baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
-      collectionName: 'memories',
-      vectorSize: 384
+      collectionName: 'dummy_data',
+      vectorSize: 1536  // OpenAI's text-embedding-3-large size
     });
     
     try {

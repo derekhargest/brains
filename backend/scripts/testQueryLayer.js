@@ -65,8 +65,8 @@ async function testQueryLayer() {
     
     const vectorStore = new QdrantVectorStore({
       baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
-      collectionName: 'query_test',
-      vectorSize: 384
+      collectionName: 'test_collection',
+      vectorSize: 1536  // OpenAI's text-embedding-3-large size
     });
     
     try {

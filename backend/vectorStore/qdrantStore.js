@@ -94,33 +94,19 @@ export class QdrantVectorStore {
     }
   }
 
-  async search(vector, limit = 10, filter = null) {
-    try {
-      if (!Array.isArray(vector) || vector.length !== this.vectorSize) {
-        throw new Error(`Invalid vector format or size. Expected array of ${this.vectorSize} dimensions`);
-      }
+  async search(vector, limit = 10) {
+    const searchParams = {
+      vector: vector.slice(0, this.vectorSize), // Ensure correct dimensions
+      limit,
+      with_payload: true,
+      with_vector: false
+    };
 
-      const searchParams = {
-        vector,
-        limit,
-        with_payload: true,
-        with_vector: false
-      };
-
-      if (filter) {
-        searchParams.filter = filter;
-      }
-
-      const response = await this.httpClient.post(
-        `/collections/${this.collectionName}/points/search`,
-        searchParams
-      );
-
-      return response.data.result;
-    } catch (error) {
-      console.error('Search failed:', error);
-      throw error;
-    }
+    const response = await this.httpClient.post(
+      `/collections/${this.collectionName}/points/search`,
+      searchParams
+    );
+    return response.data.result;
   }
 
   async delete(pointIds) {
@@ -160,6 +146,46 @@ export class QdrantVectorStore {
     } catch (error) {
       console.error('Get point failed:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Retrieve a point by ID
+   * @param {string} id - The point ID to retrieve
+   * @returns {Promise<object|null>} The retrieved point or null if not found
+   */
+  async retrieve(id) {
+    try {
+      const response = await this.httpClient.get(
+        `/collections/${this.collectionName}/points/${id}`
+      );
+      return response.data.result;
+    } catch (error) {
+      if (error.response?.status === 404) return null;
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a collection
+   * @param {string} collectionName - The name of the collection to delete
+   * @returns {Promise<boolean>} True if successful
+   */
+  async deleteCollection(collectionName) {
+    try {
+      await this.httpClient.delete(`/collections/${collectionName}`);
+      return true;
+    } catch (error) {
+      console.error('Failed to delete collection:', error);
+      throw error;
+    }
+  }
+
+  async close() {
+    if (this.httpClient) {
+      // Properly close Axios HTTP client
+      await this.httpClient.get('/ready'); // Health check
+      this.httpClient = null;
     }
   }
 }

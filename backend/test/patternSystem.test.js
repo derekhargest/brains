@@ -1,13 +1,68 @@
-import { describe, test, before, after } from './testUtils.js';
+import { describe, test, beforeAll, after } from './testUtils.js';
 import { PatternLearner, NLPPatternDetector } from '../patternMatching/patternLearner.js';
 import assert from 'assert';
 import path from 'path';
 import { promises as fs } from 'fs';
+import { TfIdf } from 'natural';
+import PatternSystem from '../patternMatching/patternSystem.js';
+
+describe('Pattern System', () => {
+  let system;
+
+  beforeEach(() => {
+    system = new PatternSystem();
+  });
+
+  test('should detect basic patterns', async () => {
+    const text = "The quick brown fox jumps over the lazy dog";
+    const patterns = await system.detectPatterns(text);
+    
+    assert(Array.isArray(patterns));
+    assert(patterns.length > 0);
+    assert(patterns[0].hasOwnProperty('type'));
+  });
+
+  test('should calculate pattern similarity', () => {
+    const pattern1 = {
+      type: 'sequence',
+      content: 'test pattern one',
+      confidence: 0.8
+    };
+    
+    const pattern2 = {
+      type: 'sequence',
+      content: 'test pattern two',
+      confidence: 0.7
+    };
+    
+    const similarity = system.calculatePatternSimilarity(pattern1, pattern2);
+    assert(typeof similarity === 'number');
+    assert(similarity >= 0 && similarity <= 1);
+  });
+
+  test('should merge similar patterns', async () => {
+    const patterns = [
+      { type: 'sequence', content: 'first pattern', confidence: 0.8 },
+      { type: 'sequence', content: 'similar pattern', confidence: 0.7 },
+      { type: 'sequence', content: 'completely different', confidence: 0.9 }
+    ];
+    
+    const merged = await system.mergePatterns(patterns);
+    assert(Array.isArray(merged));
+    assert(merged.length < patterns.length);
+  });
+
+  test('should handle empty input', async () => {
+    const patterns = await system.detectPatterns('');
+    assert(Array.isArray(patterns));
+    assert(patterns.length === 0);
+  });
+});
 
 describe('Pattern Recognition System Integration Tests', () => {
   let learner;
   
-  before(async () => {
+  beforeAll(async () => {
     // Create a fresh pattern learner for the entire test suite
     learner = new PatternLearner();
     await learner.initialize();

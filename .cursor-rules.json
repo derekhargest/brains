@@ -27,5 +27,74 @@
       "Prefer function-based components in React.",
       "Avoid unnecessary dependencies—keep the stack lightweight and maintainable.",
       "Ensure that graceful shutdown logic in `server.js` is maintained."
-    ]
+    ],
+    "version": "1.0",
+    "rules": {
+      "embedding_size_check": {
+        "enabled": true,
+        "patterns": [
+          {
+            "match": "embedding|vector",
+            "require": [
+              "size comparison",
+              "size adjustment",
+              "error handling"
+            ]
+          }
+        ]
+      },
+      "test_environment": {
+        "enabled": true,
+        "patterns": [
+          {
+            "match": "\\.test\\.js$",
+            "require": [
+              "jest imports",
+              "mock data",
+              "environment flag"
+            ]
+          }
+        ]
+      },
+      "implementation_first": {
+        "enabled": true,
+        "patterns": [
+          {
+            "match": "test",
+            "require": [
+              "implementation exists",
+              "dependencies resolved"
+            ]
+          }
+        ]
+      },
+      "dependency_resolution": {
+        "enabled": true,
+        "patterns": [
+          {
+            "match": "import|require",
+            "prevent": "circular_dependencies",
+            "require": "lazy_loading_for_circular"
+          }
+        ]
+      },
+      "error_handling": {
+        "enabled": true,
+        "patterns": [
+          {
+            "match": "async",
+            "require": [
+              "try-catch",
+              "error logging",
+              "error propagation"
+            ]
+          }
+        ]
+      }
+    },
+    "actions": {
+      "on_violation": "warn",
+      "auto_fix": false,
+      "report_to": "console"
+    }
 }

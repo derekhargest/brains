@@ -42,7 +42,7 @@ export class PatternService {
     const vectorStore = new QdrantVectorStore({
       baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
       collectionName: 'memories',
-      vectorSize: 384
+      vectorSize: 384  // Keep consistent with existing collection
     });
     
     await vectorStore.initialize();
@@ -476,6 +476,36 @@ export class PatternService {
       console.error('Error finding all patterns:', error);
       throw error;
     }
+  }
+
+  /**
+   * Detect patterns in content without storing it
+   * @param {string} content - The content to analyze
+   * @returns {Promise<Array>} Array of detected patterns
+   */
+  async detectPatternsInContent(content) {
+    if (!this.initialized) await this.initialize();
+    
+    try {
+      return await this.processContent(content, {
+        timestamp: new Date().toISOString(),
+        context: { source: 'direct-analysis' }
+      });
+    } catch (error) {
+      console.error('Error detecting patterns:', error);
+      return [];
+    }
+  }
+
+  async learnFromMemory(memory) {
+    const patterns = await this.detectPatternsInContent(memory.content);
+    await this.storage.storePatterns(patterns);
+    return patterns;
+  }
+
+  async generateInsights(options = {}) {
+    const patterns = await this.storage.searchPatterns(options);
+    return this.insightGenerator.generateFromPatterns(patterns);
   }
 }
 

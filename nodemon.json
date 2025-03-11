@@ -1,0 +1,15 @@
+{
+  "watch": ["backend/", "tests/"],
+  "ext": "js,json",
+  "ignore": ["*.test.js", "node_modules/"],
+  "events": {
+    "restart": "npm run lint",
+    "crash": "kill-port 3000"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "execMap": {
+    "js": "node --experimental-vm-modules"
+  }
+} 

@@ -1,48 +1,42 @@
-const { describe, test } = require('./testUtils');
-const NLPPatternDetector = require('../patternMatching/nlpPatternDetector');
-const assert = require('assert');
+import { describe, test } from './testUtils.js';
+import { NLPPatternDetector } from '../patternMatching/nlpPatternDetector.js';
+import assert from 'assert';
 
-describe('NLP Pattern Detector Tests', () => {
-  test('should detect temporal patterns', async () => {
-    const detector = new NLPPatternDetector();
-    await detector.initialize();
+describe('NLP Pattern Detector', () => {
+  const detector = new NLPPatternDetector();
+
+  test('should detect basic patterns', async () => {
+    const text = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
+    const patterns = await detector.detectPatterns(text);
     
-    const cases = [
-      {
-        input: "Meeting at 2pm tomorrow",
-        expectedTypes: ['temporal'],
-        expectedMatches: 2 // "2pm" and "tomorrow"
-      },
-      {
-        input: "I'll be working on Tuesday morning",
-        expectedTypes: ['temporal'],
-        expectedMatches: 2 // "Tuesday" and "morning"
-      },
-      {
-        input: "Let's meet in the afternoon",
-        expectedTypes: ['temporal'],
-        expectedMatches: 1 // "afternoon"
-      }
-    ];
-    
-    for (const testCase of cases) {
-      const result = await detector.detectPatterns(testCase.input);
-      
-      // Check that temporal patterns were detected
-      if (testCase.expectedTypes.includes('temporal')) {
-        assert(result.patterns.temporal, `Expected temporal pattern in: ${testCase.input}`);
-        assert(result.patterns.temporal.matches.length >= testCase.expectedMatches, 
-               `Expected at least ${testCase.expectedMatches} temporal matches in: ${testCase.input}`);
-      }
-      
-      // Verify confidence score
-      if (result.patterns.temporal) {
-        assert(result.patterns.temporal.confidence > 0, 
-               `Expected positive confidence score for: ${testCase.input}`);
-      }
-    }
+    assert(Array.isArray(patterns));
+    assert(patterns.length > 0);
+    assert(patterns[0].type === 'repetition');
   });
-  
+
+  test('should detect semantic patterns', async () => {
+    const text = "Machine learning models improve with more data. AI systems get better with more training examples.";
+    const patterns = await detector.detectPatterns(text);
+    
+    assert(Array.isArray(patterns));
+    assert(patterns.length > 0);
+    assert(patterns.some(p => p.type === 'semantic_similarity'));
+  });
+
+  test('should handle empty input', async () => {
+    const patterns = await detector.detectPatterns('');
+    assert(Array.isArray(patterns));
+    assert(patterns.length === 0);
+  });
+
+  test('should detect temporal patterns', async () => {
+    const text = "First I wake up, then I eat breakfast, finally I go to work.";
+    const patterns = await detector.detectPatterns(text);
+    
+    assert(Array.isArray(patterns));
+    assert(patterns.some(p => p.type === 'sequence'));
+  });
+
   test('should detect relational patterns', async () => {
     const detector = new NLPPatternDetector();
     await detector.initialize();

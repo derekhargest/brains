@@ -197,6 +197,33 @@ export class PatternLearner extends EventEmitter {
       relationalPatterns: patterns.filter(p => p.type === 'relational')
     };
   }
+
+  /**
+   * Process content to detect patterns
+   * @param {string} content - The content to analyze
+   * @param {object} options - Processing options
+   * @returns {Promise<Array>} Array of detected patterns
+   */
+  async processContent(content, options = {}) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    // Extract text if content is an object
+    const text = typeof content === 'object' && content.content 
+      ? content.content 
+      : content;
+
+    // Detect patterns
+    const patterns = await this.detectPatterns(text, options);
+
+    // Store patterns
+    for (const pattern of patterns) {
+      await this.storePattern(pattern);
+    }
+
+    return patterns;
+  }
 }
 
 export default PatternLearner; 

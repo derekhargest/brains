@@ -7,11 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import { MemoryService } from './memoryService.js';
 import { QdrantVectorStore } from '../vectorStore/qdrantStore.js';
+import { KnowledgeGraph } from './knowledgeGraph.js';
 
 dotenv.config();
 
 export class KnowledgeGraphService {
   constructor() {
+    this.graph = null;
     this.initialized = false;
     this.memoryService = null;
     this.nodes = new Map();
@@ -25,49 +27,99 @@ export class KnowledgeGraphService {
    * Initialize the knowledge graph service
    */
   async initialize() {
+    this.graph = new KnowledgeGraph();
+    return this.graph.initialize();
+  }
+  
+  /**
+   * Add a node to the knowledge graph
+   * @param {Object} data - Node data
+   * @returns {boolean} Success indicator
+   */
+  async addNode(data) {
     try {
-      // If memory service is not provided, create one
-      if (!this.memoryService) {
-        const vectorStore = new QdrantVectorStore({
-          baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
-          collectionName: 'memories',
-          vectorSize: 384
-        });
-        
-        await vectorStore.initialize();
-        this.memoryService = new MemoryService(vectorStore);
-        await this.memoryService.initialize();
-      }
-      
-      this.initialized = true;
-      console.log('Knowledge graph service initialized');
+      await this.graph.createNode(data);
       return true;
     } catch (error) {
-      console.error('Failed to initialize knowledge graph service:', error);
+      console.error('Error adding node to knowledge graph:', error);
       return false;
     }
   }
   
   /**
-   * Add a node to the knowledge graph
-   * @param {Object} node - Node to add
-   * @returns {Object} - Added node
+   * Add a relationship between nodes
+   * @param {string} fromId - Source node ID
+   * @param {string} toId - Target node ID
+   * @param {string} type - Relationship type
+   * @returns {boolean} Success indicator
    */
-  addNode(node) {
-    if (!node.id) {
-      node.id = `node_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  async addRelationship(fromId, toId, type) {
+    try {
+      await this.graph.createRelationship(fromId, toId, type);
+      return true;
+    } catch (error) {
+      console.error('Error adding relationship to knowledge graph:', error);
+      return false;
     }
-    
-    if (!node.type) {
-      node.type = 'concept';
+  }
+  
+  /**
+   * Find nodes related to a concept
+   * @param {string} concept - Concept to find related nodes for
+   * @returns {Array} Related nodes
+   */
+  async findRelatedNodes(concept) {
+    try {
+      return await this.graph.findRelatedConcepts(concept);
+    } catch (error) {
+      console.error('Error finding related nodes:', error);
+      return [];
     }
-    
-    if (!node.createdAt) {
-      node.createdAt = new Date().toISOString();
+  }
+  
+  /**
+   * Integrate patterns into the knowledge graph
+   * @param {Array} patterns - Patterns to integrate
+   * @param {string} sourceId - ID of the source (e.g., memory ID)
+   * @returns {boolean} Success indicator
+   */
+  async integratePatterns(patterns, sourceId) {
+    try {
+      for (const pattern of patterns) {
+        const node = await this.graph.createNode({
+          type: 'Pattern',
+          properties: {
+            patternType: pattern.type,
+            content: pattern.content,
+            confidence: pattern.confidence,
+            discovered: new Date().toISOString()
+          }
+        });
+
+        if (sourceId) {
+          await this.graph.createRelationship(node.id, sourceId, 'DERIVED_FROM');
+        }
+      }
+      return true;
+    } catch (error) {
+      console.error('Error integrating patterns:', error);
+      return false;
     }
-    
-    this.nodes.set(node.id, node);
-    return node;
+  }
+  
+  /**
+   * Store insights from reflective learning
+   * @param {Array} insights - Insights to store
+   * @returns {boolean} Success indicator
+   */
+  async storeInsights(insights) {
+    try {
+      await this.graph.storeInsights(insights);
+      return true;
+    } catch (error) {
+      console.error('Error storing insights:', error);
+      return false;
+    }
   }
   
   /**

@@ -7,7 +7,7 @@ export class TemporalService {
     };
     
     // Update every 5 minutes
-    setInterval(() => this.updateTimeAwareness(), 300000);
+    this.timeInterval = setInterval(() => this.updateTimeAwareness(), 300000);
   }
 
   async initialize() {
@@ -67,5 +67,9 @@ export class TemporalService {
     
     // Store patterns
     this.timeAwareness.dailyRhythms = hourlyCounts;
+  }
+
+  cleanup() {
+    if (this.timeInterval) clearInterval(this.timeInterval);
   }
 } 

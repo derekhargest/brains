@@ -1,8 +1,61 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
-const PatternHelpers = require('../patternMatching/helpers');
+import { expect } from 'chai';
+import sinon from 'sinon';
+import { PatternHelpers } from '../patternMatching/helpers.js';
 
 describe('Pattern Helpers', () => {
+  let helpers;
+
+  beforeEach(() => {
+    helpers = new PatternHelpers();
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  describe('Pattern Detection', () => {
+    test('should detect basic patterns', () => {
+      const text = "This is a test pattern. This is a test pattern.";
+      const patterns = helpers.detectBasicPatterns(text);
+      
+      expect(patterns).to.be.an('array');
+      expect(patterns).to.have.length.above(0);
+      expect(patterns[0]).to.have.property('type');
+      expect(patterns[0]).to.have.property('confidence');
+    });
+
+    test('should handle empty input', () => {
+      const patterns = helpers.detectBasicPatterns('');
+      expect(patterns).to.be.an('array');
+      expect(patterns).to.have.length(0);
+    });
+  });
+
+  describe('Pattern Analysis', () => {
+    test('should analyze pattern strength', () => {
+      const pattern = {
+        type: 'repetition',
+        content: 'test pattern',
+        occurrences: 3
+      };
+
+      const strength = helpers.analyzePatternStrength(pattern);
+      expect(strength).to.be.a('number');
+      expect(strength).to.be.within(0, 1);
+    });
+
+    test('should validate pattern structure', () => {
+      const validPattern = {
+        type: 'sequence',
+        content: 'test',
+        confidence: 0.8
+      };
+
+      const isValid = helpers.validatePattern(validPattern);
+      expect(isValid).to.be.true;
+    });
+  });
+
   describe('Time Matching', () => {
     it('should match exact times', async () => {
       const result = await PatternHelpers.isTimeMatch('3:00 PM', '15:00');
@@ -37,7 +90,7 @@ describe('Pattern Helpers', () => {
   describe('Name Extraction', () => {
     let openaiStub;
 
-    before(() => {
+    beforeAll(() => {
       openaiStub = sinon.stub(PatternHelpers, 'extractNames');
     });
 
@@ -109,7 +162,7 @@ describe('Pattern Helpers', () => {
   describe('Topic Extraction', () => {
     let openaiStub;
 
-    before(() => {
+    beforeAll(() => {
       openaiStub = sinon.stub(PatternHelpers, 'extractTopics');
     });
 

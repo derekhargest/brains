@@ -1,10 +1,10 @@
 /**
  * Test for ConceptPatterns module
  */
-const { describe, test } = require('./testUtils');
-const assert = require('assert');
-const PatternLearner = require('../patternMatching/patternLearner');
-const NLPPatternDetector = require('../patternMatching/nlpPatternDetector');
+import { describe, test } from './testUtils.js';
+import assert from 'assert';
+import { PatternLearner } from '../patternMatching/patternLearner.js';
+import { NLPPatternDetector } from '../patternMatching/nlpPatternDetector.js';
 
 // Make sure to properly stub dependent components if needed
 class MockStorage {
@@ -22,44 +22,53 @@ class MockStorage {
   }
 }
 
-describe('Concept Pattern Tests', () => {
-  test('should process patterns from text', async () => {
-    // Create a pattern learner
-    const learner = new PatternLearner();
-    await learner.initialize();
+describe('Concept Pattern Learning', () => {
+  const learner = new PatternLearner();
+  const detector = new NLPPatternDetector();
+
+  test('should learn basic patterns', async () => {
+    const text = "The quick brown fox jumps over the lazy dog";
+    const patterns = await detector.detectPatterns(text);
+    const learned = await learner.learnFromPatterns(patterns);
     
-    // Use the learnFromMemory method which we know exists
-    const memory = "Working on AI and machine learning projects with Sarah";
-    const patterns = await learner.learnFromMemory(memory);
-    
-    // Simple assertions
-    assert(patterns && patterns.length > 0, 'Should detect at least one pattern');
-    
-    // Get insights to test concept extraction
-    const insights = await learner.getInsights();
-    assert(insights, 'Should generate insights');
-    
-    // Log some useful debug info
-    console.log(`Found ${patterns.length} patterns`);
-    if (insights.conceptualInsights) {
-      console.log(`Found ${insights.conceptualInsights.centralConcepts?.length || 0} central concepts`);
-    }
+    assert(Array.isArray(learned));
+    assert(learned.length > 0);
+    assert(learned[0].hasOwnProperty('confidence'));
   });
-  
-  test('should detect patterns with NLP detector', async () => {
-    const detector = new NLPPatternDetector();
-    await detector.initialize();
+
+  test('should identify concept relationships', async () => {
+    const text = "Machine learning is a subset of artificial intelligence";
+    const patterns = await detector.detectPatterns(text);
+    const concepts = await learner.extractConcepts(patterns);
     
-    const sampleText = "Working on AI and machine learning projects with Sarah";
-    const result = await detector.detectPatterns(sampleText);
+    assert(Array.isArray(concepts));
+    assert(concepts.length > 0);
+    assert(concepts.some(c => c.type === 'relationship'));
+  });
+
+  test('should handle empty input', async () => {
+    const patterns = [];
+    const learned = await learner.learnFromPatterns(patterns);
     
-    // Simple assertions that should work with the actual implementation
-    assert(result, 'Should return a result object');
-    assert(result.patterns, 'Should detect some patterns');
+    assert(Array.isArray(learned));
+    assert(learned.length === 0);
+  });
+
+  test('should merge similar concepts', async () => {
+    const texts = [
+      "AI systems can learn from data",
+      "Artificial intelligence uses machine learning",
+      "AI and machine learning are related technologies"
+    ];
     
-    // Log detected pattern types
-    const patternTypes = Object.keys(result.patterns);
-    console.log(`Detected pattern types: ${patternTypes.join(', ')}`);
+    const allPatterns = [];
+    for (const text of texts) {
+      const patterns = await detector.detectPatterns(text);
+      allPatterns.push(...patterns);
+    }
+    
+    const concepts = await learner.extractConcepts(allPatterns);
+    assert(concepts.some(c => c.type === 'merged'));
   });
 });
 
