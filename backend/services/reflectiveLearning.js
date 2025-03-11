@@ -1,3 +1,6 @@
+import { ReflectiveInsightBank } from './reflectiveInsightBank.js';
+import { LearningPatternAnalyzer } from './learningPatternAnalyzer.js';
+
 /**
  * Reflective Learning Module
  * Enables self-assessment and meta-cognitive evaluation
@@ -9,10 +12,9 @@ export class ReflectiveLearning {
     this.metaLearner = metaLearner;
     this.insightBank = new ReflectiveInsightBank();
     this.analysisEngines = [
-      new LearningPatternAnalyzer(),
-      new CognitiveBiasDetector(),
-      new StrategyEffectivenessEvaluator()
+      new LearningPatternAnalyzer()
     ];
+    this.initialized = false;
   }
 
   async initialize() {
@@ -21,6 +23,7 @@ export class ReflectiveLearning {
       this.analysisEngines.map(engine => engine.initialize())
     );
     this._startReflectionCycle(3600); // Reflect hourly
+    this.initialized = true;
     return true;
   }
 
@@ -62,83 +65,59 @@ export class ReflectiveLearning {
     const curiosityParams = this._extractCuriosityParameters(insights);
     await this.metaLearner.adjustCuriosity(curiosityParams);
   }
-}
 
-class LearningPatternAnalyzer {
-  async analyze(data) {
-    const insights = [];
+  _resolveInsightConflicts(insights) {
+    // Simple conflict resolution - keep highest confidence insights
+    const groupedInsights = new Map();
     
-    // Detect effective learning patterns
-    const successfulPatterns = this._findEffectivePatterns(
-      data.learningHistory.successfulLearningEpisodes
-    );
-    insights.push(...successfulPatterns);
+    insights.forEach(insight => {
+      const key = `${insight.type}_${insight.context || ''}`;
+      if (!groupedInsights.has(key) || 
+          groupedInsights.get(key).confidence < insight.confidence) {
+        groupedInsights.set(key, insight);
+      }
+    });
     
-    // Detect ineffective patterns
-    const ineffectivePatterns = this._findIneffectivePatterns(
-      data.learningHistory.failedLearningAttempts
-    );
-    insights.push(...ineffectivePatterns);
-    
-    return insights;
+    return Array.from(groupedInsights.values());
   }
 
-  _findEffectivePatterns(episodes) {
-    // Pattern mining algorithm
-    return episodes.map(episode => ({
-      type: 'effective_pattern',
-      confidence: 0.85,
-      context: episode.context,
-      strategy: episode.strategy,
-      evidence: episode.results
+  _convertInsightsToStrategies(insights) {
+    return insights.map(insight => ({
+      type: insight.type,
+      adjustments: insight.recommendations || [],
+      confidence: insight.confidence
     }));
   }
-}
 
-class CognitiveBiasDetector {
-  async analyze(data) {
-    const biases = [];
+  _extractCuriosityParameters(insights) {
+    const relevantInsights = insights.filter(i => 
+      i.type === 'exploration_pattern' || 
+      i.type === 'curiosity_adjustment'
+    );
     
-    // Check for confirmation bias
-    if(await this._detectConfirmationBias(data)) {
-      biases.push({
-        type: 'confirmation_bias',
-        description: 'Over-preference for confirming existing knowledge',
-        confidence: 0.92,
-        evidence: data.learningHistory.searchPatterns
-      });
-    }
-    
-    // Check for stability bias
-    if(await this._detectStabilityBias(data)) {
-      biases.push({
-        type: 'stability_bias',
-        description: 'Resistance to paradigm shifts in knowledge',
-        confidence: 0.87,
-        evidence: data.knowledgeSnapshot.majorParadigmShifts
-      });
-    }
-    
-    return biases;
+    return relevantInsights.reduce((params, insight) => {
+      if (insight.parameters) {
+        Object.assign(params, insight.parameters);
+      }
+      return params;
+    }, {});
   }
-}
 
-class StrategyEffectivenessEvaluator {
-  async analyze(data) {
-    const evaluations = [];
-    
-    // Evaluate curiosity strategies
-    const curiosityEvaluation = await this._evaluateStrategyFamily(
-      data.performanceMetrics.curiosityStrategies
-    );
-    evaluations.push(curiosityEvaluation);
-    
-    // Evaluate memory strategies
-    const memoryEvaluation = await this._evaluateStrategyFamily(
-      data.performanceMetrics.memoryStrategies
-    );
-    evaluations.push(memoryEvaluation);
-    
-    return evaluations;
+  _generateImprovementPlan(insights) {
+    return {
+      strategyAdjustments: this._convertInsightsToStrategies(insights),
+      curiosityParameters: this._extractCuriosityParameters(insights),
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  _startReflectionCycle(intervalSeconds) {
+    setInterval(async () => {
+      try {
+        await this.performDeepReflection();
+      } catch (error) {
+        console.error('Reflection cycle failed:', error);
+      }
+    }, intervalSeconds * 1000);
   }
 } 

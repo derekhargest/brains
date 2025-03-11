@@ -1,5 +1,5 @@
 /**
- * Derek-Brain Full System Test
+ * brains!!! Full System Test
  * 
  * This script runs a comprehensive test of all system components:
  * - Qdrant connection
@@ -10,14 +10,14 @@
  * - Visualization generation
  */
 
-const { v4: uuidv4 } = require('uuid');
-const fs = require('fs').promises;
-const path = require('path');
-const axios = require('axios');
-const { connectVectorStore } = require('../storage/vectorStore');
-const MemoryService = require('../services/memoryService');
-const PatternService = require('../services/patternService');
-const VisualizationService = require('../services/visualizationService');
+import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
+import path from 'path';
+import axios from 'axios';
+import { connectVectorStore } from '../storage/vectorStore.js';
+import { MemoryService } from '../services/memoryService.js';
+import { PatternService } from '../services/patternService.js';
+import { VisualizationService } from '../services/visualizationService.js';
 
 // Pretty console output helpers
 const colors = {
@@ -135,7 +135,7 @@ async function waitForServer(baseUrl, maxAttempts = 5) {
 
 // Main test function
 async function runFullSystemTest() {
-  printHeader('DEREK-BRAIN FULL SYSTEM TEST');
+  printHeader('brains!!! FULL SYSTEM TEST');
   console.log('Running comprehensive tests of all system components...');
   
   const testResults = {

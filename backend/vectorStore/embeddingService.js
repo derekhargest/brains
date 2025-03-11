@@ -33,7 +33,7 @@ export class EmbeddingService {
   async getEmbedding(text) {
     if (!text) {
       console.warn('Empty text provided for embedding');
-      return new Array(384).fill(0);
+      return new Array(1536).fill(0);
     }
 
     try {
@@ -76,7 +76,7 @@ export class EmbeddingService {
   // Generate a deterministic "dummy" embedding for testing or when OpenAI API is unavailable
   getDummyEmbedding(text) {
     const seed = text.length > 0 ? text.charCodeAt(0) * text.length : 0;
-    const vectorSize = 384;
+    const vectorSize = 1536;
     const embedding = new Array(vectorSize).fill(0);
     
     for (let i = 0; i < vectorSize; i++) {

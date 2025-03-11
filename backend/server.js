@@ -17,8 +17,9 @@ import {
 import memoryRoutes from "./api/routes/memoryRoutes.js";
 import patternRoutes from "./api/routes/patternRoutes.js";
 import preferenceRoutes from "./api/routes/preferenceRoutes.js";
-import testRoutes from './routes/testRoutes.js';
+import testRoutes from './api/routes/testRoutes.js';
 import uploadRoutes from './api/routes/uploadRoutes.js';
+import knowledgeGraphRoutes from './api/routes/knowledgeGraphRoutes.js';
 
 // Create __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -42,13 +43,14 @@ const patternService = new PatternService();
 
 // Health check route
 app.get("/", (req, res) => {
-  res.send("🚀 Derek-Brain API is running!");
+  res.send("🚀 brains!!! api is running!");
 });
 
 // API Routes - use proper router modules
-app.use('/api/memories', require('./api/routes/memoryRoutes'));
-app.use('/api/upload', require('./api/routes/uploadRoutes'));
-app.use("/api/patterns", patternRoutes);
+app.use('/api/memories', memoryRoutes);
+app.use('/api/patterns', patternRoutes);
+app.use('/api/knowledge-graph', knowledgeGraphRoutes);
+app.use('/api/upload', uploadRoutes);
 app.use("/api/preferences", preferenceRoutes);
 app.use('/api/tests', testRoutes);
 console.log('Registered upload routes:');

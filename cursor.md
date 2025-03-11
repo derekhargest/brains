@@ -1,7 +1,7 @@
-# AI Brain Project: Technology Stack Reference
+# brains!!! project: technology stack reference
 
-## Project Information
-- **Project Name**: AI Brain Memory System
+## project details
+- **Project Name**: brains!!! memory system
 - **Version**: 0.1.0
 
 ## Technology Stack

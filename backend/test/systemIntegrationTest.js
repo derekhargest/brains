@@ -1,17 +1,22 @@
 /**
- * Derek-Brain System Integration Test
+ * brains!!! System Integration Test
  * 
- * This test verifies the core functionality of the Derek-Brain system,
+ * This test verifies the core functionality of the brains!!! system,
  * including memory processing, pattern detection, and insight generation.
  */
 
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+import assert from 'assert';
+import { describe, it } from 'mocha';
+import { MemoryService } from '../services/memoryService.js';
+import { PatternService } from '../services/patternService.js';
+import { KnowledgeGraphService } from '../services/knowledgeGraphService.js';
+import { CuriosityEngine } from '../services/curiosityEngine.js';
+import { MetaLearningController } from '../services/metaLearningController.js';
+import { ReflectiveLearning } from '../services/reflectiveLearning.js';
 
 // Test runner
 async function runTests() {
-  console.log("\n📋 Derek-Brain System Integration Test");
+  console.log("\n📋 brains!!! System Integration Test");
   
   let passed = 0;
   let failed = 0;

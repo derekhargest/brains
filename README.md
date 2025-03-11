@@ -1,99 +1,164 @@
-# Brains!!! - Cognitive Memory System
+# brains!!!: Personal Cognitive System
 
-A sophisticated memory system that uses vector embeddings to store and retrieve memories with semantic understanding. This system includes pattern detection, knowledge graph relationships, and proactive learning capabilities.
+A personal cognitive system that functions as a "second brain" with a sophisticated memory architecture designed to store, retrieve, and organize knowledge in a way that mimics human cognition.
 
-## Features
+## 🧠 Overview
 
-- **Vector-based Memory Storage**: Store memories as semantic vectors for intelligent retrieval
-- **Temporal Pattern Recognition**: Detect patterns in time-based data
-- **Knowledge Graph**: Map relationships between entities and concepts
-- **Proactive Learning**: Self-improvement based on usage patterns
-- **Multimodal Input**: Process text, structured data, and conversations
-- **Interactive Visualizations**: View memory insights and connections
+brains!!! is a cognitive architecture that provides:
 
-## Prerequisites
+- **Intelligent Memory Storage** - Store memories with rich context and metadata
+- **Semantic Search** - Find information through meaning, not just keywords
+- **Pattern Detection** - Identify connections and recurring themes
+- **Knowledge Graph** - Visualize relationships between concepts and memories
+- **Reflective Learning** - The system improves its organization over time
 
-- Node.js (v16+)
-- Docker (for running Qdrant vector database)
-- OpenAI API key (for embeddings and AI features)
+## 🚀 MVP Features
 
-## Installation
+The current MVP demonstrates the core functionality of the system:
+
+- **Memory Operations** - Store, retrieve, search, update, and delete memories
+- **Vector-Based Retrieval** - Semantic search using Qdrant vector database
+- **Entity Tracking** - Track people, topics, and recurring concepts
+- **Pattern Detection** - Identify connections between stored memories
+- **Knowledge Graph** - Visualize relationships between different pieces of knowledge
+- **Basic Dashboard** - Simple UI for interacting with the system
+
+## 🛠️ Setup Instructions
+
+### Prerequisites
+
+- Node.js (v14+)
+- npm or yarn
+- Qdrant vector database (running locally or remote)
+
+### Installation
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/ai-brain.git
-   cd ai-brain
-   ```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   Edit the `.env` file and add your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_api_key_here
-   PORT=3002
-   ```
-
-4. **Start Qdrant vector database**
-   ```bash
-   docker run -d -p 6333:6333 -p 6334:6334 qdrant/qdrant
-   ```
-
-## Running the Application
-
-### Development Mode
 ```bash
-npm run dev
+git clone https://github.com/yourusername/brains.git
+cd brains
 ```
 
-### Production Mode
+2. **Install dependencies**
+
 ```bash
+# Install backend dependencies
+npm install
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
+```
+
+3. **Configure environment variables**
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+QDRANT_URL=http://localhost:6333
+OPENAI_API_KEY=your_openai_api_key  # Optional, for enhanced features
+PORT=3001
+```
+
+4. **Start Qdrant**
+
+If you're running Qdrant locally, you can use Docker:
+
+```bash
+docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
+```
+
+### Running the System
+
+1. **Populate with test data (optional)**
+
+```bash
+node backend/scripts/populateDummyData.js
+```
+
+2. **Start the backend server**
+
+```bash
+node backend/server.js
+```
+
+3. **Start the frontend development server**
+
+```bash
+cd frontend
 npm start
 ```
 
-The application will be available at `http://localhost:3002`
+4. **Access the dashboard**
 
-## Test Data Generation
-
-You can create synthetic test data to explore the system:
-
-1. Open `http://localhost:3002/data-generator.html`
-2. Configure the generator parameters
-3. Click "Generate Data"
-4. Click "Import to Vector Store" to add the data to your system
-
-## Testing
-
-Run the test suite:
-```bash
-npm test
+Open your browser and navigate to:
+```
+http://localhost:3000
 ```
 
-Run specific test modules:
+## 🧪 Testing the System
+
+The MVP includes several test scripts to verify functionality:
+
 ```bash
-npm run test:patterns   # Test pattern detection
-npm run test:nlp        # Test NLP capabilities
-npm run test:system     # Run system integration tests
+# Test memory core functionality
+node backend/scripts/testMemoryCore.js
+
+# Test query and retrieval layer
+node backend/scripts/testQueryLayer.js
 ```
 
-Check Qdrant connection:
-```bash
-npm run check:qdrant
-```
+## 📚 API Endpoints
 
-## System Architecture
+The system provides the following API endpoints:
 
-- **Backend**: Node.js with Express
-- **Vector Database**: Qdrant
-- **Embeddings**: OpenAI embeddings API
-- **Frontend**: Vanilla JavaScript with Chart.js and vis-network
+### Memory Operations
 
-## License
+- `GET /api/memories` - Search memories with optional query and filters
+- `GET /api/memories/:id` - Retrieve a specific memory
+- `POST /api/memories` - Store a new memory
+- `PUT /api/memories/:id` - Update a memory
+- `DELETE /api/memories/:id` - Delete a memory
+- `POST /api/memories/query` - Advanced query with full options
+- `GET /api/memories/similar/:id` - Find memories similar to a specific memory
 
-MIT License
+### Pattern Detection
+
+- `GET /api/patterns` - Find all patterns in memories
+- `GET /api/patterns/topics` - Find topic patterns
+- `GET /api/patterns/entities` - Find entity co-occurrence patterns
+- `GET /api/patterns/temporal` - Find temporal patterns
+
+### Knowledge Graph
+
+- `GET /api/knowledge-graph` - Get the current knowledge graph
+- `POST /api/knowledge-graph/create` - Create a knowledge graph from memories
+- `GET /api/knowledge-graph/nodes` - Get all nodes in the knowledge graph
+- `GET /api/knowledge-graph/edges` - Get all edges in the knowledge graph
+- `GET /api/knowledge-graph/paths` - Find paths between nodes
+- `POST /api/knowledge-graph/node` - Add a node to the knowledge graph
+- `POST /api/knowledge-graph/edge` - Add an edge to the knowledge graph
+
+## 📋 Next Steps
+
+After the MVP, planned enhancements include:
+
+- Advanced UI with visualizations for the knowledge graph
+- Automated reflection and memory reorganization
+- Integration with external data sources
+- Natural language interface for queries
+- Personalized insights and recommendations
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Contact
+
+For questions or feedback, please reach out to [your-email@example.com](mailto:your-email@example.com)

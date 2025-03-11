@@ -1,6 +1,7 @@
 import PatternLearner from '../patterns/patternLearner.js';
 import { InsightGenerator } from '../patterns/insightGenerator.js';
 import PatternStorage from '../patterns/storage/patternStorage.js';
+import { QdrantVectorStore } from '../vectorStore/qdrantStore.js';
 
 /**
  * Service for pattern-related operations
@@ -12,6 +13,8 @@ export class PatternService {
     this.patternLearner = null;
     this.insightGenerator = new InsightGenerator();
     this.initialized = false;
+    this.memoryService = null;
+    this.patterns = [];
   }
   
   async initialize() {
@@ -22,8 +25,34 @@ export class PatternService {
     this.patternLearner = new PatternLearner(this.storage);
     await this.patternLearner.initialize();
     
+    // We'll lazy-load the memory service when needed
+    
     this.initialized = true;
+    console.log('Pattern service initialized');
     return true;
+  }
+  
+  // Lazy-load memory service when needed
+  async getMemoryService() {
+    if (this.memoryService) {
+      return this.memoryService;
+    }
+    
+    // Create a new memory service with vector store
+    const vectorStore = new QdrantVectorStore({
+      baseUrl: process.env.QDRANT_URL || 'http://localhost:6333',
+      collectionName: 'memories',
+      vectorSize: 384
+    });
+    
+    await vectorStore.initialize();
+    
+    // Import dynamically to avoid circular dependency
+    const { MemoryService } = await import('./memoryService.js');
+    this.memoryService = new MemoryService(vectorStore);
+    await this.memoryService.initialize();
+    
+    return this.memoryService;
   }
   
   /**
@@ -33,11 +62,15 @@ export class PatternService {
    * @returns {Array} The patterns detected
    */
   async processContent(content, context = {}) {
-    if (!this.initialized) {
-      await this.initialize();
-    }
+    if (!this.initialized) await this.initialize();
     
-    return this.patternLearner.learnFromMemory(content, context);
+    // Process with pattern learner
+    const patterns = await this.patternLearner.processContent(content, context);
+    
+    // Store patterns
+    await this.storage.storePatterns(patterns);
+    
+    return patterns;
   }
   
   /**
@@ -45,11 +78,12 @@ export class PatternService {
    * @returns {Array} All patterns
    */
   async getAllPatterns() {
-    if (!this.initialized) {
-      await this.initialize();
-    }
+    if (!this.initialized) await this.initialize();
     
-    return this.storage.getAllPatterns();
+    // Get all patterns from storage
+    const patterns = await this.storage.getAllPatterns();
+    
+    return patterns;
   }
   
   /**
@@ -234,6 +268,214 @@ export class PatternService {
       longestDuration: Math.max(...durationEvents.map(m => m.metadata.duration)),
       shortestDuration: Math.min(...durationEvents.map(m => m.metadata.duration))
     };
+  }
+
+  /**
+   * Detect recurring topics in memories
+   * @param {Object} options - Options for pattern detection
+   * @returns {Array} - Array of detected topic patterns
+   */
+  async detectTopicPatterns(options = {}) {
+    try {
+      // Get all memories
+      const memoryService = await this.getMemoryService();
+      const memories = await memoryService.searchMemories("", {
+        limit: options.limit || 100
+      });
+      
+      // Extract topics from metadata
+      const topicCounts = {};
+      
+      memories.forEach(memory => {
+        if (memory.metadata && memory.metadata.topic) {
+          const topic = memory.metadata.topic;
+          topicCounts[topic] = (topicCounts[topic] || 0) + 1;
+        }
+      });
+      
+      // Convert to array and sort by frequency
+      const topicPatterns = Object.entries(topicCounts)
+        .map(([topic, count]) => ({
+          topic,
+          count,
+          frequency: count / memories.length
+        }))
+        .filter(pattern => pattern.count >= (options.minCount || 2))
+        .sort((a, b) => b.count - a.count);
+      
+      return topicPatterns;
+    } catch (error) {
+      console.error('Error detecting topic patterns:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Detect entity co-occurrences in memories
+   * @param {Object} options - Options for pattern detection
+   * @returns {Array} - Array of detected entity co-occurrence patterns
+   */
+  async detectEntityCooccurrences(options = {}) {
+    try {
+      // Get all memories
+      const memoryService = await this.getMemoryService();
+      const memories = await memoryService.searchMemories("", {
+        limit: options.limit || 100
+      });
+      
+      // Track entity co-occurrences
+      const cooccurrences = {};
+      const entityCounts = {};
+      
+      // Process each memory
+      memories.forEach(memory => {
+        if (memory.metadata && memory.metadata.entities) {
+          const entities = memory.metadata.entities;
+          
+          // Count individual entities
+          entities.forEach(entity => {
+            entityCounts[entity] = (entityCounts[entity] || 0) + 1;
+          });
+          
+          // Count co-occurrences
+          for (let i = 0; i < entities.length; i++) {
+            for (let j = i + 1; j < entities.length; j++) {
+              const pair = [entities[i], entities[j]].sort().join('::');
+              cooccurrences[pair] = (cooccurrences[pair] || 0) + 1;
+            }
+          }
+        }
+      });
+      
+      // Convert to array and sort by frequency
+      const cooccurrencePatterns = Object.entries(cooccurrences)
+        .map(([pair, count]) => {
+          const [entity1, entity2] = pair.split('::');
+          return {
+            entities: [entity1, entity2],
+            count,
+            entity1Count: entityCounts[entity1] || 0,
+            entity2Count: entityCounts[entity2] || 0,
+            strength: count / Math.min(entityCounts[entity1] || 1, entityCounts[entity2] || 1)
+          };
+        })
+        .filter(pattern => pattern.count >= (options.minCount || 2))
+        .sort((a, b) => b.strength - a.strength);
+      
+      return cooccurrencePatterns;
+    } catch (error) {
+      console.error('Error detecting entity co-occurrences:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Detect temporal patterns in memories
+   * @param {Object} options - Options for pattern detection
+   * @returns {Array} - Array of detected temporal patterns
+   */
+  async detectTemporalPatterns(options = {}) {
+    try {
+      // Get all memories
+      const memoryService = await this.getMemoryService();
+      const memories = await memoryService.searchMemories("", {
+        limit: options.limit || 100
+      });
+      
+      // Group memories by time periods
+      const timeGroups = {
+        daily: {},
+        weekly: {},
+        monthly: {}
+      };
+      
+      memories.forEach(memory => {
+        if (memory.timestamp) {
+          const date = new Date(memory.timestamp);
+          
+          // Daily pattern (hour of day)
+          const hour = date.getHours();
+          timeGroups.daily[hour] = (timeGroups.daily[hour] || 0) + 1;
+          
+          // Weekly pattern (day of week)
+          const dayOfWeek = date.getDay();
+          timeGroups.weekly[dayOfWeek] = (timeGroups.weekly[dayOfWeek] || 0) + 1;
+          
+          // Monthly pattern (day of month)
+          const dayOfMonth = date.getDate();
+          timeGroups.monthly[dayOfMonth] = (timeGroups.monthly[dayOfMonth] || 0) + 1;
+        }
+      });
+      
+      // Process daily patterns
+      const dailyPatterns = Object.entries(timeGroups.daily)
+        .map(([hour, count]) => ({
+          type: 'daily',
+          hour: parseInt(hour),
+          count,
+          frequency: count / memories.length
+        }))
+        .sort((a, b) => b.count - a.count);
+      
+      // Process weekly patterns
+      const weeklyPatterns = Object.entries(timeGroups.weekly)
+        .map(([day, count]) => ({
+          type: 'weekly',
+          day: parseInt(day),
+          dayName: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][parseInt(day)],
+          count,
+          frequency: count / memories.length
+        }))
+        .sort((a, b) => b.count - a.count);
+      
+      // Process monthly patterns
+      const monthlyPatterns = Object.entries(timeGroups.monthly)
+        .map(([day, count]) => ({
+          type: 'monthly',
+          day: parseInt(day),
+          count,
+          frequency: count / memories.length
+        }))
+        .sort((a, b) => b.count - a.count);
+      
+      return {
+        daily: dailyPatterns,
+        weekly: weeklyPatterns,
+        monthly: monthlyPatterns
+      };
+    } catch (error) {
+      console.error('Error detecting temporal patterns:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Find all patterns in memories
+   * @param {Object} options - Options for pattern detection
+   * @returns {Object} - Object containing all detected patterns
+   */
+  async findAllPatterns(options = {}) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+    
+    try {
+      const [topicPatterns, entityCooccurrences, temporalPatterns] = await Promise.all([
+        this.detectTopicPatterns(options),
+        this.detectEntityCooccurrences(options),
+        this.detectTemporalPatterns(options)
+      ]);
+      
+      return {
+        topics: topicPatterns,
+        entityCooccurrences,
+        temporal: temporalPatterns,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('Error finding all patterns:', error);
+      throw error;
+    }
   }
 }
 

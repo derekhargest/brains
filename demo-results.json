@@ -1,0 +1,49 @@
+{
+  "totalMemories": 4,
+  "memories": [
+    {
+      "id": "mem_1",
+      "content": "Met with Sarah and Alex to discuss the AI project timeline. Sarah suggested we focus on data preparation first.",
+      "metadata": {
+        "importance": 0.8,
+        "source": "meeting",
+        "type": "work"
+      },
+      "timestamp": "2025-03-11T03:48:49.501Z",
+      "vector": []
+    },
+    {
+      "id": "mem_2",
+      "content": "Reviewed the latest research papers on transformer architectures. The findings show improvements in efficiency.",
+      "metadata": {
+        "importance": 0.7,
+        "source": "research",
+        "type": "work"
+      },
+      "timestamp": "2025-03-11T03:48:49.501Z",
+      "vector": []
+    },
+    {
+      "id": "mem_3",
+      "content": "Need to pick up groceries on the way home: milk, eggs, and bread. Also need to get coffee.",
+      "metadata": {
+        "importance": 0.6,
+        "source": "note",
+        "type": "personal"
+      },
+      "timestamp": "2025-03-11T03:48:49.502Z",
+      "vector": []
+    },
+    {
+      "id": "mem_4",
+      "content": "Alex mentioned that the data preprocessing pipeline needs to be updated by next Friday.",
+      "metadata": {
+        "importance": 0.9,
+        "source": "conversation",
+        "type": "work"
+      },
+      "timestamp": "2025-03-11T03:48:49.502Z",
+      "vector": []
+    }
+  ]
+}

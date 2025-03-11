@@ -164,5 +164,5 @@ socket.on('ai response', (response) => {
 
 // Add an initial greeting
 setTimeout(() => {
-    addMessage("Hello! I'm your Brains!!! assistant. How can I help you today?", false);
+    addMessage("Hello! I'm your brains!!! assistant. How can I help you today?", false);
 }, 1000); 

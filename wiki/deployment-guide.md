@@ -4,13 +4,13 @@ created: 2025-03-05T22:01:04Z
 updated: 2025-03-05T22:01:04Z
 ---
 
-# 🚀 AI Brain - Deployment Guide
+# 🚀 brains!!! - deployment guide
 
-This guide provides detailed instructions for deploying the AI Brain system in various environments, with a focus on Docker-based deployments for both development and production.
+This guide provides detailed instructions for deploying the brains!!! system in various environments, with a focus on Docker-based deployments for both development and production.
 
 ## Prerequisites
 
-Before deploying the AI Brain system, ensure you have the following:
+Before deploying the brains!!! system, ensure you have the following:
 
 - [Node.js](https://nodejs.org/) (v16 or higher)
 - [Docker](https://www.docker.com/get-started) and Docker Compose

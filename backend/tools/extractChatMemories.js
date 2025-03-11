@@ -68,6 +68,4 @@ export class ChatMemoryExtractor {
   }
   
   // Keep existing methods
-}
-
-export { ChatMemoryExtractor }; 
+} 

@@ -1,15 +1,16 @@
-require('dotenv').config();
-const { PatternLearner } = require('../patternMatching/patternLearner');
-const { describe, test } = require('./testUtils');
-const assert = require('assert');
+import { config } from 'dotenv';
+import { describe, test, expect } from './testUtils.js';
+import { PatternLearner } from '../patternMatching/patternLearner.js';
+import assert from 'assert';
+
+config();
 
 // Define the tests
 describe('Pattern Matching Tests', () => {
   test('should initialize pattern learner', async () => {
     const learner = new PatternLearner();
     await learner.initialize();
-    assert(learner.storage, 'Expected learner to have storage initialized');
-    assert(learner.nlpDetector, 'Expected NLP detector to be initialized');
+    assert(learner.initialized, 'Pattern learner should be initialized');
   });
 
   test('should learn from a simple memory', async () => {

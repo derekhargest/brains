@@ -1,6 +1,6 @@
 /**
  * Full System Integration Test
- * Tests the entire Derek-Brain system from API to storage
+ * Tests the entire brains!!! system from API to storage
  */
 
 const assert = require('assert');
@@ -23,7 +23,7 @@ const testMemories = [
 
 // Test suite
 async function runTests() {
-  console.log('🧪 Running Derek-Brain Full System Test');
+  console.log('🧪 Running brains!!! Full System Test');
   
   let passed = 0;
   let failed = 0;
@@ -49,7 +49,7 @@ async function runTests() {
     try {
       const response = await axios.get(`${API_URL.replace('/api', '')}/`);
       assert.strictEqual(response.status, 200, 'Expected 200 OK response');
-      assert(response.data.includes('Derek-Brain API'), 'Expected API health message');
+      assert(response.data.includes('brains!!! API'), 'Expected API health message');
     } catch (error) {
       throw new Error(`API not reachable: ${error.message}`);
     }

@@ -1,8 +1,11 @@
+import { StrategyLibrary } from './strategyLibrary.js';
+import { GeneticAlgorithmOptimizer } from './geneticOptimizer.js';
+
 /**
  * Self-Optimizing Meta-Learning System
  * Watches all learning processes and optimizes their operation
  */
-class MetaLearningController {
+export class MetaLearningController {
   constructor(curiosityEngine, knowledgeGraph, memoryService) {
     this.curiosity = curiosityEngine;
     this.kg = knowledgeGraph;
@@ -94,34 +97,47 @@ class MetaLearningController {
     return 0.9 * Math.pow(saturation, 2);
   }
 
-  async enableReflectiveLearning() {
-    this.reflectiveLearner = new ReflectiveLearning(
-      this.kg,
-      this.memory,
-      this
-    );
-    
-    await this.reflectiveLearner.initialize();
-    
-    // Connect to optimization cycle
-    this.optimizationHooks.push(
-      async (improvements) => {
-        const reflectionImprovements = await this.reflectiveLearner
-          .performDeepReflection();
-        return [...improvements, ...reflectionImprovements];
-      }
-    );
+  async analyzeMemoryPerformance(metrics) {
+    // Implementation for memory performance analysis
+    return [];
+  }
+
+  async analyzeReasoningPerformance(metrics) {
+    // Implementation for reasoning performance analysis
+    return [];
+  }
+
+  prioritizeImprovements(improvements) {
+    // Sort by impact and confidence
+    return improvements.sort((a, b) => {
+      const impactA = Math.abs(a.adjustment);
+      const impactB = Math.abs(b.adjustment);
+      return impactB - impactA;
+    });
   }
 
   async applyOptimizations(improvements) {
-    // Existing optimization logic...
-    
-    // Apply reflective insights
-    const reflectiveInsights = improvements
-      .filter(i => i.source === 'reflection');
-    
-    for(const insight of reflectiveInsights) {
-      await this._applyReflectiveInsight(insight);
+    for(const improvement of improvements) {
+      switch(improvement.system) {
+        case 'curiosity':
+          await this.curiosity.updateExplorationPolicy(
+            improvement.parameter,
+            improvement.adjustment
+          );
+          break;
+        case 'memory':
+          await this.memory.updateRetentionPolicy(
+            improvement.parameter,
+            improvement.adjustment
+          );
+          break;
+        case 'reasoning':
+          await this.kg.updateInferencePolicy(
+            improvement.parameter,
+            improvement.adjustment
+          );
+          break;
+      }
     }
   }
 }
@@ -129,29 +145,48 @@ class MetaLearningController {
 class LearningTelemetry {
   constructor() {
     this.probes = new Map();
-    this.metricHistory = [];
   }
-  
+
   async installProbes(systems) {
     for(const system of systems) {
-      const probe = new LearningProbe(system);
-      this.probes.set(system.constructor.name, probe);
-      await probe.install();
+      if(system) {
+        this.probes.set(system, {
+          lastCheck: new Date(),
+          metrics: {}
+        });
+      }
     }
   }
-  
+
   async captureSnapshot() {
-    const snapshot = {
-      timestamp: new Date(),
-      systems: {}
-    };
-    
-    for(const [name, probe] of this.probes) {
-      snapshot.systems[name] = await probe.captureMetrics();
+    const snapshot = {};
+    for(const [system, probe] of this.probes) {
+      if(system.getMetrics) {
+        snapshot[system] = await system.getMetrics();
+      }
     }
-    
-    this.metricHistory.push(snapshot);
     return snapshot;
+  }
+}
+
+class HyperparameterOptimizer {
+  constructor() {
+    this.history = [];
+  }
+
+  async optimize(parameters, objective) {
+    // Simple grid search implementation
+    const results = [];
+    for(const param of parameters) {
+      const value = await this.evaluateParameter(param, objective);
+      results.push({ param, value });
+    }
+    return results;
+  }
+
+  async evaluateParameter(param, objective) {
+    // Simplified evaluation
+    return Math.random();
   }
 }
 
@@ -164,52 +199,27 @@ class LearningStrategyEvolver {
       crossoverRate: 0.7
     });
   }
-  
+
   async evolveStrategies(performanceData) {
     const strategyDNA = this._convertToStrategyDNA(performanceData);
     const optimizedDNA = await this.geneticOptimizer.optimize(strategyDNA);
     return this._convertFromStrategyDNA(optimizedDNA);
   }
-  
+
   _convertToStrategyDNA(metrics) {
-    // Convert complex metrics to genetic algorithm representation
     return {
       explorationBias: metrics.curiosity.explorationEfficiency,
       memoryRetention: metrics.memory.retrievalAccuracy,
       reasoningDepth: metrics.reasoning.inferenceDepth
     };
   }
-  
+
   _convertFromStrategyDNA(dna) {
     return {
       curiosity: { explorationBias: dna.explorationBias },
       memory: { retentionPolicy: dna.memoryRetention },
       reasoning: { depthSettings: dna.reasoningDepth }
     };
-  }
-}
-
-class HyperparameterOptimizer {
-  constructor() {
-    this.adjustmentStrategies = new Map([
-      ['explorationBias', this.adjustExplorationBias],
-      ['noveltyDecay', this.adjustNoveltyDecay]
-    ]);
-  }
-
-  adjustExplorationBias(currentValue, efficiency) {
-    return efficiency < 0.3 ? 
-      Math.max(0.1, currentValue - 0.15) :
-      Math.min(0.9, currentValue + 0.05);
-  }
-
-  adjustNoveltyDecay(currentValue, saturation) {
-    return 0.9 * Math.pow(saturation, 2);
-  }
-
-  getOptimizationFor(parameter, context) {
-    const strategy = this.adjustmentStrategies.get(parameter);
-    return strategy ? strategy(context.currentValue, context.metrics) : 0;
   }
 }
 
@@ -223,11 +233,4 @@ class MemoryConsolidationLoop {
 
 class ReasoningOptimizationLoop {
   // Implementation
-}
-
-export default MetaLearningController;
-export {
-  LearningTelemetry,
-  LearningStrategyEvolver,
-  HyperparameterOptimizer
-}; 
+} 

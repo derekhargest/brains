@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { PatternService } from './patternService.js';
+import OpenAI from 'openai';
+import dotenv from 'dotenv';
 import { QdrantVectorStore } from '../vectorStore/qdrantStore.js';
 import { EmbeddingService } from '../vectorStore/embeddingService.js';
 import { encode } from 'gpt-3-encoder';
@@ -9,6 +10,15 @@ import { EntityService } from './entityService.js';
 import { EnrichmentService } from './enrichmentService.js';
 import { KnowledgeGraphService } from './knowledgeGraphService.js';
 import { TemporalService } from './temporalService.js';
+
+dotenv.config();
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// Use a lazy-loaded pattern service to avoid circular dependency
+let patternServiceInstance = null;
 
 /**
  * Memory Service
@@ -20,7 +30,8 @@ export class MemoryService {
     this.vectorStore = vectorStore;
     this.collectionName = collectionName;
     this.embeddingCache = new Map();
-    this.patternService = new PatternService();
+    // Don't initialize patternService here to avoid circular dependency
+    this.patternService = null;
     this.initialized = false;
     this.retryQueue = [];
     this.syncInterval = setInterval(this.processRetryQueue.bind(this), 60000);
@@ -50,13 +61,29 @@ export class MemoryService {
         this.knowledgeGraphService = global.services.knowledgeGraphService;
       }
       
+      // We'll lazy-load the pattern service when needed
+
+      // Set initialized flag
       this.initialized = true;
       console.log('✅ Memory service initialized successfully');
       return true;
     } catch (error) {
-      console.error('Error initializing MemoryService:', error);
-      return false;
+      console.error('Failed to initialize memory service:', error);
+      throw error;
     }
+  }
+  
+  // Lazy-load pattern service when needed
+  async getPatternService() {
+    if (this.patternService) {
+      return this.patternService;
+    }
+    
+    // Import dynamically to avoid circular dependency
+    const { PatternService } = await import('./patternService.js');
+    this.patternService = new PatternService();
+    // Don't initialize it here to avoid circular dependency
+    return this.patternService;
   }
   
   /**
@@ -66,45 +93,43 @@ export class MemoryService {
    */
   async storeMemory(memory) {
     try {
-      if (!this.initialized) {
-        await this.initialize();
+      if (!memory.content) {
+        throw new Error('Memory content is required');
       }
-      
-      // Generate ID if not provided
-      if (!memory.id) {
-        memory.id = uuidv4();
-      }
-      
-      // Add timestamp if not provided
-      if (!memory.timestamp) {
-        memory.timestamp = new Date().toISOString();
-      }
-      
-      // Enrich memory with additional metadata
-      const enrichedMemory = await this.enrichmentService.enrichMemory(memory);
-      
-      // Create embedding for the memory content
-      const embedding = await this.embeddingService.getEmbedding(enrichedMemory.content);
-      
-      // Store in vector database
-      await this.vectorStore.upsert(this.collectionName, {
-        id: enrichedMemory.id,
-        vector: embedding,
-        payload: enrichedMemory
+
+      // Generate embedding for the memory content
+      const vector = await this.generateEmbedding(memory.content);
+
+      // Prepare the point for Qdrant
+      const point = {
+        id: memory.id || uuidv4(),
+        vector: vector,
+        payload: {
+          content: memory.content,
+          type: memory.type || 'general',
+          timestamp: memory.timestamp || new Date().toISOString(),
+          metadata: memory.metadata || {},
+        }
+      };
+
+      console.log('Storing memory point:', {
+        id: point.id,
+        vectorSize: point.vector.length,
+        payload: point.payload
       });
-      
-      // Explicitly check if knowledgeGraphService exists
-      if (this.knowledgeGraphService) {
-        console.log('Updating knowledge graph with memory:', enrichedMemory.id);
-        await this.knowledgeGraphService.processMemory(enrichedMemory);
-      } else {
-        console.error('Knowledge graph service not available in memory service!');
-      }
-      
-      console.log(`Memory stored: ${enrichedMemory.id}`);
-      return enrichedMemory;
+
+      // Store in vector database
+      await this.vectorStore.upsert(point);
+
+      return {
+        id: point.id,
+        ...point.payload
+      };
     } catch (error) {
       console.error('Error storing memory:', error);
+      if (error.response?.data) {
+        console.error('Vector store error details:', error.response.data);
+      }
       throw error;
     }
   }
@@ -231,9 +256,7 @@ export class MemoryService {
    */
   async deleteMemory(id) {
     try {
-      await this.vectorStore.delete(this.collectionName, {
-        points: [id]
-      });
+      await this.vectorStore.delete(id);
       return true;
     } catch (error) {
       console.error(`Error deleting memory ${id}:`, error);
@@ -250,48 +273,26 @@ export class MemoryService {
    * @returns {Array} The embedding vector
    */
   async generateEmbedding(text) {
-    // Check cache first
-    if (this.embeddingCache.has(text)) {
-      return this.embeddingCache.get(text);
-    }
-    
     try {
-      // Simple hash function to convert text to a number
-      function simpleHash(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-          const char = str.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash & hash; // Convert to 32bit integer
-        }
-        return hash;
-      }
-      
-      // Generate a deterministic but simple embedding based on the text
-      const tokens = text.toLowerCase().split(/\s+/);
-      const embedding = new Array(384).fill(0);
-      
-      // Use token positions to influence the embedding
-      tokens.forEach((token, i) => {
-        const hashValue = simpleHash(token);
-        const position = Math.abs(hashValue) % 384;
-        embedding[position] += 1.0;
-        
-        // Add some influence from neighboring positions
-        embedding[(position + 1) % 384] += 0.5;
-        embedding[(position + 2) % 384] += 0.25;
+      const response = await openai.embeddings.create({
+        model: "text-embedding-ada-002",
+        input: text,
       });
+
+      if (!response.data || !response.data[0].embedding) {
+        throw new Error('Invalid response from OpenAI API');
+      }
+
+      const embedding = response.data[0].embedding;
       
-      // Normalize the embedding to unit length
-      const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
-      const normalizedEmbedding = embedding.map(val => val / magnitude);
-      
-      // Cache the result
-      this.embeddingCache.set(text, normalizedEmbedding);
-      
-      return normalizedEmbedding;
+      // Validate embedding size
+      if (embedding.length !== this.vectorStore.vectorSize) {
+        throw new Error(`Embedding size mismatch: Got ${embedding.length}, expected ${this.vectorStore.vectorSize}`);
+      }
+
+      return embedding;
     } catch (error) {
-      console.error("Error generating embedding:", error);
+      console.error('Error generating embedding:', error);
       throw error;
     }
   }
@@ -316,7 +317,7 @@ export class MemoryService {
     await this.storeMemory(memory);
     
     // Process for patterns
-    const patterns = await this.patternService.processContent(content, context);
+    const patterns = await this.getPatternService().processContent(content, context);
     
     return {
       memory,
@@ -365,10 +366,26 @@ export class MemoryService {
     }
   }
 
-  async searchMemories(query) {
-    return this.memories.filter(m => 
-      m.content.toLowerCase().includes(query.toLowerCase())
-    );
+  async searchMemories(query, limit = 10) {
+    try {
+      // Generate embedding for the search query
+      const queryVector = await this.generateEmbedding(query);
+
+      // Search in vector database
+      const results = await this.vectorStore.search(queryVector, limit);
+
+      return results.map(result => ({
+        id: result.id,
+        content: result.payload.content,
+        type: result.payload.type,
+        timestamp: result.payload.timestamp,
+        metadata: result.payload.metadata,
+        similarity: result.score
+      }));
+    } catch (error) {
+      console.error('Error searching memories:', error);
+      throw error;
+    }
   }
 
   async consolidateMemories(retentionDays = 180) {
@@ -455,6 +472,44 @@ export class MemoryService {
     await this.vectorStore.deletePoints(toDelete.map(m => m.id));
     
     return { updated: updated.length, deleted: toDelete.length };
+  }
+
+  async updateMemory(id, updates) {
+    try {
+      // First retrieve the existing memory
+      const existingMemory = await this.vectorStore.getPoint(id);
+      
+      if (!existingMemory) {
+        throw new Error(`Memory with id ${id} not found`);
+      }
+
+      // Merge updates with existing memory
+      const updatedMemory = {
+        ...existingMemory.payload,
+        ...updates,
+        timestamp: updates.timestamp || new Date().toISOString()
+      };
+
+      // If content was updated, generate new embedding
+      const vector = updates.content ? 
+        await this.generateEmbedding(updates.content) : 
+        existingMemory.vector;
+
+      // Store updated memory
+      await this.vectorStore.upsert({
+        id,
+        vector,
+        payload: updatedMemory
+      });
+
+      return {
+        id,
+        ...updatedMemory
+      };
+    } catch (error) {
+      console.error('Error updating memory:', error);
+      throw error;
+    }
   }
 }
 

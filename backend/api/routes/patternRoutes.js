@@ -1,85 +1,119 @@
 import express from 'express';
 import { PatternService } from '../../services/patternService.js';
-import { getPatterns } from '../controllers/patternController.js';
 
 const router = express.Router();
-const patternService = new PatternService();
 
-// Define routes
+// Initialize services
+let patternService;
+const initializeServices = async () => {
+  try {
+    patternService = new PatternService();
+    await patternService.initialize();
+    console.log('Pattern service initialized for pattern routes');
+    return true;
+  } catch (error) {
+    console.error('Failed to initialize services for pattern routes:', error);
+    return false;
+  }
+};
+
+// Initialize services when this module is loaded
+initializeServices();
+
+// Middleware to ensure services are initialized
+const ensureServicesInitialized = async (req, res, next) => {
+  if (!patternService) {
+    const initialized = await initializeServices();
+    if (!initialized) {
+      return res.status(500).json({ error: 'Pattern services not available' });
+    }
+  }
+  next();
+};
+
+// Apply middleware to all routes
+router.use(ensureServicesInitialized);
+
+/**
+ * @route GET /api/patterns
+ * @description Find all patterns in memories
+ */
 router.get('/', async (req, res) => {
   try {
-    const patterns = await patternService.getAllPatterns();
-    res.json({ success: true, patterns });
-  } catch (error) {
-    console.error('Error getting patterns:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to retrieve patterns'
-    });
-  }
-});
-
-// Add other pattern-related routes
-router.get('/insights', async (req, res) => {
-  try {
-    const insights = await patternService.getPatternInsights();
-    res.json({ success: true, insights });
-  } catch (error) {
-    console.error('Error getting pattern insights:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to retrieve pattern insights'
-    });
-  }
-});
-
-// Get patterns by type
-router.get('/type/:type', async (req, res) => {
-  try {
-    const { type } = req.params;
-    const patterns = await patternService.getPatternsByType(type);
-    res.json(patterns);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get visualization data
-router.get('/visualization/network', async (req, res) => {
-  try {
-    // Default network data if real data isn't available yet
-    const defaultNetwork = {
-      nodes: [
-        { id: 'memory', label: 'Memory', size: 30 },
-        { id: 'pattern', label: 'Pattern', size: 25 },
-        { id: 'insight', label: 'Insight', size: 20 }
-      ],
-      edges: [
-        { from: 'memory', to: 'pattern', value: 5 },
-        { from: 'pattern', to: 'insight', value: 3 }
-      ]
+    const { limit, minCount } = req.query;
+    
+    const options = {
+      limit: limit ? parseInt(limit) : 100,
+      minCount: minCount ? parseInt(minCount) : 2
     };
     
-    // Try to get real data, fall back to default
-    try {
-      const networkData = await patternService.generateNetworkVisualization();
-      res.json(networkData);
-    } catch (error) {
-      console.warn('Using fallback network data:', error.message);
-      res.json(defaultNetwork);
-    }
+    const patterns = await patternService.findAllPatterns(options);
+    res.json(patterns);
   } catch (error) {
-    console.error('Error generating network visualization:', error);
-    res.status(500).json({ error: 'Failed to generate visualization' });
+    console.error('Error finding patterns:', error);
+    res.status(500).json({ error: 'Failed to find patterns' });
   }
 });
 
-router.get('/visualization/timeline', async (req, res) => {
+/**
+ * @route GET /api/patterns/topics
+ * @description Find topic patterns in memories
+ */
+router.get('/topics', async (req, res) => {
   try {
-    const timelineData = await patternService.getTimelineVisualizationData();
-    res.json(timelineData);
+    const { limit, minCount } = req.query;
+    
+    const options = {
+      limit: limit ? parseInt(limit) : 100,
+      minCount: minCount ? parseInt(minCount) : 2
+    };
+    
+    const topicPatterns = await patternService.detectTopicPatterns(options);
+    res.json(topicPatterns);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error finding topic patterns:', error);
+    res.status(500).json({ error: 'Failed to find topic patterns' });
+  }
+});
+
+/**
+ * @route GET /api/patterns/entities
+ * @description Find entity co-occurrence patterns in memories
+ */
+router.get('/entities', async (req, res) => {
+  try {
+    const { limit, minCount } = req.query;
+    
+    const options = {
+      limit: limit ? parseInt(limit) : 100,
+      minCount: minCount ? parseInt(minCount) : 2
+    };
+    
+    const entityCooccurrences = await patternService.detectEntityCooccurrences(options);
+    res.json(entityCooccurrences);
+  } catch (error) {
+    console.error('Error finding entity co-occurrences:', error);
+    res.status(500).json({ error: 'Failed to find entity co-occurrences' });
+  }
+});
+
+/**
+ * @route GET /api/patterns/temporal
+ * @description Find temporal patterns in memories
+ */
+router.get('/temporal', async (req, res) => {
+  try {
+    const { limit } = req.query;
+    
+    const options = {
+      limit: limit ? parseInt(limit) : 100
+    };
+    
+    const temporalPatterns = await patternService.detectTemporalPatterns(options);
+    res.json(temporalPatterns);
+  } catch (error) {
+    console.error('Error finding temporal patterns:', error);
+    res.status(500).json({ error: 'Failed to find temporal patterns' });
   }
 });
 

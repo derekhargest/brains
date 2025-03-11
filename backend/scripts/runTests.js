@@ -1,5 +1,5 @@
 /**
- * Derek-Brain Test Runner
+ * brains!!! test runner
  * 
  * Runs individual tests or all tests in sequence
  */
@@ -15,7 +15,7 @@ const { setupTestEnvironment } = require('./utils/testUtils');
 const DEFAULT_TESTS = ['memory'];
 
 async function runTests(tests = DEFAULT_TESTS) {
-  visual.showHeader('🧪 DEREK-BRAIN TEST RUNNER');
+  visual.showHeader('🧪 brains!!! test runner');
   
   const results = {};
   let startTime = Date.now();

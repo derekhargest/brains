@@ -1,5 +1,5 @@
 /**
- * Derek-Brain Comprehensive Integration Test
+ * brains!!! Comprehensive Integration Test
  * 
  * Tests the complete flow from memory ingestion through pattern recognition,
  * concept extraction, insight generation, and visualization data creation.
@@ -33,7 +33,7 @@ const testMemories = [
 ];
 
 async function runIntegrationTest() {
-  console.log("\n🧠 DEREK-BRAIN COMPREHENSIVE INTEGRATION TEST\n");
+  console.log("\n🧠 brains!!! COMPREHENSIVE INTEGRATION TEST\n");
   console.log("Testing complete system pipeline from memory to insights...\n");
   
   let testResults = {
