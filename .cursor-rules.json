@@ -1,0 +1,31 @@
+{
+    "backend": [
+      "Use PostgreSQL for structured data but keep schema flexible with JSONB fields where necessary.",
+      "Use Qdrant for vectorized memory retrieval and AI-powered search.",
+      "API routes should be structured as RESTful and secured with JWT authentication.",
+      "Do not enforce strict SQL schema yet—allow tables to evolve dynamically.",
+      "Use Express.js for the backend, with modularized files for tasks, wiki, and memory storage.",
+      "Write error-handling for all database queries to prevent crashes.",
+      "All async API calls should use try-catch blocks with proper logging.",
+      "Ensure API routes like `/api/statistics` and `/api/wiki` are used correctly.",
+      "Implement WebSockets (`/backend/websocket.js`) for real-time AI memory updates."
+    ],
+    "frontend": [
+      "Use React for the frontend and style components with SCSS.",
+      "Do not use Tailwind or inline styles—only SCSS modules.",
+      "Ensure that React components are modular and reusable.",
+      "Allow AI to assist in generating new components when needed.",
+      "Use a centralized API file (`/frontend/src/api.js`) to handle all backend communication.",
+      "Implement authentication handling in React using JWT tokens stored in localStorage.",
+      "Use context providers for global state management instead of Redux unless necessary.",
+      "Frontend must integrate with `/api/wiki` and `/api/statistics` to display structured AI knowledge.",
+      "Ensure WebSockets (`/frontend/src/websocket.js`) are used to sync live AI memory updates."
+    ],
+    "general": [
+      "All new code should be documented inline for clarity.",
+      "All API endpoints should follow RESTful conventions.",
+      "Prefer function-based components in React.",
+      "Avoid unnecessary dependencies—keep the stack lightweight and maintainable.",
+      "Ensure that graceful shutdown logic in `server.js` is maintained."
+    ]
+}

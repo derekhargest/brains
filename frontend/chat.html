@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brains!!! - Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chat-styles.css">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Brain Chat</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/wiki.html">Wiki</a>
+                <a href="/chat.html" class="active">Chat</a>
+            </nav>
+        </header>
+
+        <main class="chat-container">
+            <div class="chat-history" id="chat-history">
+                <div class="welcome-message">
+                    <h2>Welcome to AI Brain Chat</h2>
+                    <p>I have access to your stored memories and can help answer questions or have a conversation.</p>
+                </div>
+                <!-- Chat messages will appear here -->
+            </div>
+            
+            <div class="chat-input-area">
+                <textarea id="chat-input" placeholder="Type your message here..."></textarea>
+                <button id="send-button">Send</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>AI Brain System &copy; 2024</p>
+        </footer>
+    </div>
+    <script>
+      // Add this right before the chat.js script tag
+      function checkSocketConnection() {
+        console.log("Testing Socket.io connection...");
+        try {
+          const testSocket = io();
+          testSocket.on('connect', () => {
+            console.log("Socket.io connection successful!");
+          });
+          testSocket.on('connect_error', (err) => {
+            console.error("Socket.io connection failed:", err);
+          });
+        } catch (e) {
+          console.error("Socket.io is not available:", e);
+        }
+      }
+      
+      // Run the test after page load
+      window.onload = checkSocketConnection;
+    </script>
+    <script src="chat.js"></script>
+</body>
+</html> 

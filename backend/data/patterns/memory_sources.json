@@ -1,0 +1,513 @@
+{
+  "memories": [
+    {
+      "content": "Morning coffee while coding at 9am",
+      "modelProvider": "openai",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "subject": "Morning routine",
+            "confidence": 0.9
+          },
+          {
+            "theme": "Coffee consumption",
+            "confidence": 0.95
+          },
+          {
+            "concept": "Coding",
+            "confidence": 0.95
+          },
+          {
+            "term": "9am",
+            "confidence": 0.95
+          }
+        ],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:41:30.715Z"
+    },
+    {
+      "content": "Team meeting about AI integration at 2pm",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "subject_matter": "Team Meeting",
+            "confidence": 0.95
+          },
+          {
+            "key_themes": "AI Integration",
+            "confidence": 0.9
+          },
+          {
+            "recurring_concepts": "Scheduling",
+            "confidence": 0.85
+          },
+          {
+            "important_terms": [
+              "meeting",
+              "about",
+              "integration",
+              "at",
+              "2pm"
+            ],
+            "confidence": 0.98
+          }
+        ],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:42:08.564Z"
+    },
+    {
+      "content": "Morning coffee while coding at 9am",
+      "modelProvider": "openai",
+      "patterns": {
+        "names": [],
+        "patterns": [
+          {
+            "type": "behavioral",
+            "action": "coding",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:42:29.247Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          }
+        ]
+      },
+      "timestamp": "2025-03-05T01:42:42.562Z"
+    },
+    {
+      "content": "Team meeting about AI integration at 2pm",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "subject_matter": "Team meeting",
+            "confidence": 0.95
+          },
+          {
+            "key_themes": "AI integration",
+            "confidence": 0.9
+          },
+          {
+            "recurring_concepts": "Meeting scheduling",
+            "confidence": 0.85
+          },
+          {
+            "important_terms": {
+              "meeting": 0.95,
+              "about": 0.8,
+              "integration": 0.9,
+              "at": 0.75,
+              "2pm": 0.95
+            }
+          }
+        ],
+        "patterns": [
+          {
+            "type": "behavioral",
+            "action": "meeting",
+            "occurrences": [
+              {
+                "content": "Team meeting about AI integration at 2pm",
+                "timestamp": "2025-03-05T01:43:11.522Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "Team meeting",
+            "occurrences": [
+              {
+                "content": "Team meeting about AI integration at 2pm",
+                "timestamp": "2025-03-05T01:43:11.522Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.95,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "AI integration",
+            "occurrences": [
+              {
+                "content": "Team meeting about AI integration at 2pm",
+                "timestamp": "2025-03-05T01:43:11.522Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.9,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "meeting, about, integration, at, 2pm",
+            "occurrences": [
+              {
+                "content": "Team meeting about AI integration at 2pm",
+                "timestamp": "2025-03-05T01:43:11.522Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.98,
+            "contexts": {}
+          }
+        ]
+      },
+      "timestamp": "2025-03-05T01:43:23.825Z"
+    },
+    {
+      "content": "Debugging session with Sarah went well",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [
+          "Sarah"
+        ],
+        "topics": [
+          {
+            "subject_matter": "Debugging session",
+            "confidence": 0.95
+          },
+          {
+            "key_themes": "Collaboration and problem-solving",
+            "confidence": 0.85
+          },
+          {
+            "recurring_concepts": "Effectiveness of debugging sessions",
+            "confidence": 0.8
+          },
+          {
+            "important_terms": [
+              {
+                "term": "session",
+                "confidence": 0.9
+              },
+              {
+                "term": "with",
+                "confidence": 0.75
+              },
+              {
+                "term": "went",
+                "confidence": 0.7
+              },
+              {
+                "term": "well",
+                "confidence": 0.85
+              },
+              {
+                "term": "Debugging",
+                "confidence": 0.95
+              }
+            ]
+          }
+        ],
+        "patterns": [
+          {
+            "type": "topical",
+            "topic": "Debugging",
+            "occurrences": [
+              {
+                "content": "Debugging session with Sarah went well",
+                "timestamp": "2025-03-05T01:43:46.268Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.95,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "Collaboration",
+            "occurrences": [
+              {
+                "content": "Debugging session with Sarah went well",
+                "timestamp": "2025-03-05T01:43:46.268Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.85,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "session with went well Debugging",
+            "occurrences": [
+              {
+                "content": "Debugging session with Sarah went well",
+                "timestamp": "2025-03-05T01:43:46.268Z",
+                "modelProvider": "deepseek"
+              }
+            ],
+            "confidence": 0.98,
+            "contexts": {}
+          }
+        ]
+      },
+      "timestamp": "2025-03-05T01:43:56.755Z"
+    },
+    {
+      "content": "Morning coffee while coding at 9am",
+      "modelProvider": "openai",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "subject_matter": "Morning routine",
+            "confidence_score": 0.95
+          },
+          {
+            "key_themes": "Coding",
+            "confidence_score": 0.95
+          },
+          {
+            "recurring_concepts": "Coffee consumption",
+            "confidence_score": 0.9
+          },
+          {
+            "important_terms": [
+              {
+                "term": "coffee",
+                "confidence_score": 0.99
+              },
+              {
+                "term": "while",
+                "confidence_score": 0.8
+              },
+              {
+                "term": "coding",
+                "confidence_score": 0.95
+              },
+              {
+                "term": "at",
+                "confidence_score": 0.8
+              },
+              {
+                "term": "9am",
+                "confidence_score": 0.95
+              }
+            ]
+          }
+        ],
+        "patterns": [
+          {
+            "type": "topical",
+            "topic": "Routine or habit",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:44:49.841Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "Productivity",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:44:49.841Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "Morning ritual",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:44:49.841Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "[object Object] [object Object] [object Object] [object Object] [object Object]",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:44:49.841Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.5,
+            "contexts": {}
+          }
+        ]
+      },
+      "timestamp": "2025-03-05T01:44:55.809Z"
+    },
+    {
+      "content": "Morning coffee while coding at 9am",
+      "modelProvider": "openai",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "text": "coffee",
+            "confidence": 0.9
+          },
+          {
+            "text": "coding",
+            "confidence": 0.85
+          },
+          {
+            "text": "time",
+            "confidence": 0.7
+          },
+          {
+            "text": "routine",
+            "confidence": 0.6
+          }
+        ],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:45:49.238Z"
+    },
+    {
+      "content": "Team meeting about AI integration at 2pm",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:45:50.585Z"
+    },
+    {
+      "content": "Debugging session with Sarah went well",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:45:51.590Z"
+    },
+    {
+      "content": "Morning coffee while coding at 9am",
+      "modelProvider": "openai",
+      "patterns": {
+        "names": [],
+        "topics": [
+          {
+            "topic": "coffee",
+            "confidence": 0.9
+          },
+          {
+            "topic": "coding",
+            "confidence": 0.9
+          },
+          {
+            "topic": "morning routine",
+            "confidence": 0.8
+          },
+          {
+            "topic": "time",
+            "confidence": 0.7
+          }
+        ],
+        "patterns": [
+          {
+            "type": "topical",
+            "topic": "coffee",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:47:11.163Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.9,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "coding",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:47:11.163Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.85,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "morning routine",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:47:11.163Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.7,
+            "contexts": {}
+          },
+          {
+            "type": "topical",
+            "topic": "time",
+            "occurrences": [
+              {
+                "content": "Morning coffee while coding at 9am",
+                "timestamp": "2025-03-05T01:47:11.163Z",
+                "modelProvider": "openai"
+              }
+            ],
+            "confidence": 0.6,
+            "contexts": {}
+          }
+        ]
+      },
+      "timestamp": "2025-03-05T01:47:12.174Z"
+    },
+    {
+      "content": "Team meeting about AI integration at 2pm",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:47:13.594Z"
+    },
+    {
+      "content": "Debugging session with Sarah went well",
+      "modelProvider": "deepseek",
+      "patterns": {
+        "names": [],
+        "topics": [],
+        "patterns": []
+      },
+      "timestamp": "2025-03-05T01:47:14.642Z"
+    }
+  ],
+  "stats": {
+    "openai": 5,
+    "deepseek": 7,
+    "total": 12
+  }
+}

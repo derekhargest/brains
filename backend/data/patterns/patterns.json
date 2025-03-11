@@ -1,0 +1,1210 @@
+{
+  "temporal": [],
+  "behavioral": [
+    {
+      "type": "behavioral",
+      "action": "coding",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:42:29.247Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:44:49.841Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:45:48.112Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:45:55.686Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:47:11.163Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:47:18.019Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:48:18.648Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:48:26.525Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:49:13.941Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:49:21.305Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:04.215Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:50:10.987Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:53.413Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:51:02.030Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:51:54.094Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:52:10.993Z"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:04.360Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:47.953Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:54:35.677Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:55:34.246Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:59:41.151Z"
+        }
+      ],
+      "confidence": 1,
+      "contexts": [
+        "default",
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "behavioral",
+      "action": "meeting",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:43:11.522Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:45:50.156Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:45:55.376Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:47:13.225Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:47:17.708Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:48:20.787Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:48:26.011Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:49:15.816Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:49:20.388Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:50:05.338Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:50:10.240Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:50:55.914Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:51:01.562Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:51:57.030Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:09.556Z"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:17.285Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:59.854Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:56:00.584Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        }
+      ],
+      "confidence": 1,
+      "contexts": [
+        "default",
+        "work"
+      ],
+      "relationships": []
+    }
+  ],
+  "relational": [
+    {
+      "type": "relational",
+      "name": "Sarah",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:52:00.236Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:12.425Z"
+        },
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:56:46.352Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        },
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:57.128Z"
+        }
+      ],
+      "confidence": 0.6999988869598766,
+      "contexts": [
+        "default",
+        "work"
+      ],
+      "relationships": []
+    }
+  ],
+  "topical": [
+    {
+      "type": "topical",
+      "topic": "Team meeting",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:43:11.522Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:51:57.030Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:17.285Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:56:00.584Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.9999990384259259,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "AI integration",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:43:11.522Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:51:57.030Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:17.285Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:56:00.584Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.9999990384259259,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "meeting, about, integration, at, 2pm",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:43:11.522Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:17.285Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:56:00.584Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.899999038425926,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Debugging",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:43:46.268Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:56:46.352Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.7999991268518518,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Collaboration",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:43:46.268Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:56:46.352Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.7999991268518518,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "session with went well Debugging",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:43:46.268Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.98,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Routine or habit",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:44:49.841Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Productivity",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:44:49.841Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Morning ritual",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:44:49.841Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "[object Object] [object Object] [object Object] [object Object] [object Object]",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:44:49.841Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:57.128Z"
+        }
+      ],
+      "confidence": 0.8999989574074074,
+      "contexts": [
+        "default",
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "coffee",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:47:11.163Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:48:18.648Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:49:13.941Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:51:54.094Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:04.360Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:55:34.246Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 1,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "coding",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:47:11.163Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:48:18.648Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:49:13.941Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:51:54.094Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:04.360Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:55:34.246Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 1,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "morning routine",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:47:11.163Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:48:18.648Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:49:13.941Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:04.360Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:55:34.246Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 1,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "time",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:47:11.163Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:48:18.648Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:53:04.360Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.8999998527777778,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "time management",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:49:13.941Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:55:34.246Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.7999999202160494,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Morning Routine",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:53.413Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Coding",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:53.413Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:59:41.151Z"
+        }
+      ],
+      "confidence": 0.8999987675925926,
+      "contexts": [
+        "default",
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Coffee",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:53.413Z",
+          "modelProvider": "openai"
+        },
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:12.425Z"
+        }
+      ],
+      "confidence": 0.8999999093364197,
+      "contexts": [
+        "default",
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Time Management",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:50:53.413Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.7,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "routine",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:51:54.094Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.6,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "morning",
+      "occurrences": [
+        {
+          "content": "Morning coffee while coding at 9am",
+          "timestamp": "2025-03-05T01:51:54.094Z",
+          "modelProvider": "openai"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "2pm",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:51:57.030Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.7,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Debugging session",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:52:00.236Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Sarah",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:52:00.236Z",
+          "modelProvider": "deepseek"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:09.556Z"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        }
+      ],
+      "confidence": 0.9999979066358025,
+      "contexts": [
+        "default",
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Positive outcome",
+      "occurrences": [
+        {
+          "content": "Debugging session with Sarah went well",
+          "timestamp": "2025-03-05T01:52:00.236Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.7,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Meeting scheduling",
+      "occurrences": [
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:09.556Z"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "API project",
+      "occurrences": [
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:09.556Z"
+        }
+      ],
+      "confidence": 0.8,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Tiredness",
+      "occurrences": [
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:52:10.993Z"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Coding session",
+      "occurrences": [
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:52:10.993Z"
+        }
+      ],
+      "confidence": 0.8,
+      "contexts": [
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Taking a break",
+      "occurrences": [
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:52:10.993Z"
+        }
+      ],
+      "confidence": 0.7,
+      "contexts": [
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Meeting",
+      "occurrences": [
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:12.425Z"
+        },
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        },
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:57.128Z"
+        }
+      ],
+      "confidence": 0.8999989574074074,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Project progress",
+      "occurrences": [
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:52:12.425Z"
+        }
+      ],
+      "confidence": 0.8,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "AI features implementation",
+      "occurrences": [
+        {
+          "content": "Excited about the new AI features we're implementing!",
+          "context": {
+            "type": "work",
+            "project": "AI"
+          },
+          "timestamp": "2025-03-05T01:52:13.603Z"
+        },
+        {
+          "content": "Excited about the new AI features we're implementing!",
+          "context": {
+            "type": "work",
+            "project": "AI"
+          },
+          "timestamp": "2025-03-05T02:00:11.557Z"
+        }
+      ],
+      "confidence": 0.7999984035493827,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Excitement",
+      "occurrences": [
+        {
+          "content": "Excited about the new AI features we're implementing!",
+          "context": {
+            "type": "work",
+            "project": "AI"
+          },
+          "timestamp": "2025-03-05T01:52:13.603Z"
+        }
+      ],
+      "confidence": 0.8,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Team Meeting",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:59.854Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.95,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "AI Integration",
+      "occurrences": [
+        {
+          "content": "Team meeting about AI integration at 2pm",
+          "timestamp": "2025-03-05T01:54:59.854Z",
+          "modelProvider": "deepseek"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "default"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "API Project",
+      "occurrences": [
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "10am",
+      "occurrences": [
+        {
+          "content": "Meeting with Sarah about the API project at 10am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:14.017Z"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Self-care",
+      "occurrences": [
+        {
+          "content": "Feeling tired after long coding session, need to take a break",
+          "context": {
+            "type": "personal",
+            "category": "health"
+          },
+          "timestamp": "2025-03-05T01:59:41.151Z"
+        }
+      ],
+      "confidence": 0.5,
+      "contexts": [
+        "personal"
+      ],
+      "relationships": []
+    },
+    {
+      "type": "topical",
+      "topic": "Project Progress Discussion",
+      "occurrences": [
+        {
+          "content": "Coffee with Sarah to discuss project progress at 10:15am",
+          "context": {
+            "type": "work",
+            "project": "API"
+          },
+          "timestamp": "2025-03-05T01:59:57.128Z"
+        }
+      ],
+      "confidence": 0.9,
+      "contexts": [
+        "work"
+      ],
+      "relationships": []
+    }
+  ],
+  "lastUpdated": "2025-03-05T02:00:32.247Z"
+}

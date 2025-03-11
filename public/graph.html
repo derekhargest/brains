@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Graph Visualization</title>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+    #app {
+      display: flex;
+      height: 100%;
+    }
+    #sidebar {
+      width: 300px;
+      padding: 15px;
+      box-sizing: border-box;
+      background-color: #f5f5f5;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+    }
+    #graph-container {
+      flex-grow: 1;
+      height: 100%;
+      position: relative;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+    .stats-container {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .entity-list {
+      margin-top: 10px;
+    }
+    .entity-item {
+      padding: 5px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .entity-item:hover {
+      background-color: #e9e9e9;
+    }
+    .node-type {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    .type-person { background-color: #FF5733; }
+    .type-place { background-color: #33A1FF; }
+    .type-organization { background-color: #33FF57; }
+    .type-memory { background-color: #B533FF; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="sidebar">
+      <h1>Knowledge Graph</h1>
+      
+      <div>
+        <h2>Search</h2>
+        <input type="text" id="search-input" placeholder="Search for entities...">
+        <button id="search-btn">Search</button>
+      </div>
+      
+      <div class="stats-container">
+        <h2>Statistics</h2>
+        <div id="stats-display">Loading statistics...</div>
+      </div>
+      
+      <div>
+        <h2>Entities</h2>
+        <div id="entity-list" class="entity-list">
+          <p>Loading entities...</p>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Actions</h2>
+        <button id="refresh-btn">Refresh Graph</button>
+        <button id="add-memory-btn">Add Test Memory</button>
+      </div>
+    </div>
+    
+    <div id="graph-container"></div>
+  </div>
+  
+  <script>
+    // Initialize the network visualization
+    const container = document.getElementById('graph-container');
+    
+    // Configuration options
+    const options = {
+      nodes: {
+        shape: 'dot',
+        size: 16,
+        font: {
+          size: 14,
+        },
+        borderWidth: 2,
+        shadow: true
+      },
+      edges: {
+        width: 2,
+        smooth: {
+          type: 'continuous'
+        },
+        arrows: {
+          to: { enabled: true, scaleFactor: 0.5 }
+        }
+      },
+      physics: {
+        stabilization: false,
+        barnesHut: {
+          gravitationalConstant: -80000,
+          springConstant: 0.001,
+          springLength: 200
+        }
+      },
+      groups: {
+        PERSON: {
+          color: { background: '#FF5733', border: '#CC4400' },
+          shape: 'icon',
+          icon: {
+            face: 'FontAwesome',
+            code: '\uf007',
+            size: 50,
+            color: '#ffffff'
+          }
+        },
+        PLACE: {
+          color: { background: '#33A1FF', border: '#0074CC' },
+          shape: 'icon',
+          icon: {
+            face: 'FontAwesome',
+            code: '\uf3c5',
+            size: 50,
+            color: '#ffffff'
+          }
+        },
+        ORGANIZATION: {
+          color: { background: '#33FF57', border: '#00CC24' },
+          shape: 'icon',
+          icon: {
+            face: 'FontAwesome',
+            code: '\uf1ad',
+            size: 50,
+            color: '#ffffff'
+          }
+        },
+        MEMORY: {
+          color: { background: '#B533FF', border: '#8200CC' },
+          shape: 'icon',
+          icon: {
+            face: 'FontAwesome',
+            code: '\uf0eb',
+            size: 50,
+            color: '#ffffff'
+          }
+        }
+      }
+    };
+    
+    // Create network with empty data
+    const network = new vis.Network(container, { nodes: [], edges: [] }, options);
+    
+    // Load graph data
+    async function loadGraphData(centralNode = null) {
+      try {
+        let url = '/api/graph/visualization';
+        if (centralNode) {
+          url += `?centralNode=${encodeURIComponent(centralNode)}`;
+        }
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        console.log("Graph data received:", data);
+        
+        if (data.success && data.graph) {
+          // Map the data to the format expected by vis.js
+          const nodes = data.graph.nodes.map(node => {
+            // Get color based on node type
+            let color;
+            switch (node.type.toLowerCase()) {
+              case 'person':
+                color = '#FF5733';
+                break;
+              case 'place':
+                color = '#33A1FF';
+                break;
+              case 'organization':
+                color = '#33FF57';
+                break;
+              case 'memory':
+                color = '#B533FF';
+                break;
+              default:
+                color = '#999999';
+            }
+            
+            return {
+              id: node.id,
+              label: node.label || node.name || 'Unknown',
+              color: color,
+              title: `${node.type}: ${node.label || node.name || 'Unknown'}`
+            };
+          });
+          
+          const edges = data.graph.edges.map(edge => ({
+            id: edge.id,
+            from: edge.from,
+            to: edge.to,
+            label: edge.label,
+            title: edge.label
+          }));
+          
+          // Update the network
+          network.setData({ nodes, edges });
+          
+          // If empty, show a message
+          if (nodes.length === 0) {
+            alert("No data found in the graph. Try adding more memories with entities.");
+          }
+        } else {
+          console.error('Invalid graph data format:', data);
+          alert("Error loading graph data - see console for details");
+        }
+      } catch (error) {
+        console.error('Failed to load graph data:', error);
+        alert("Failed to load graph data - see console for details");
+      }
+    }
+    
+    // Load statistics
+    async function loadStatistics() {
+      try {
+        const response = await fetch('/api/graph/statistics');
+        const data = await response.json();
+        
+        if (data.success && data.statistics) {
+          const stats = data.statistics;
+          const statsHtml = `
+            <p><strong>Total Nodes:</strong> ${stats.totalNodes}</p>
+            <p><strong>Total Connections:</strong> ${stats.totalEdges}</p>
+            <h3>Node Types:</h3>
+            <ul>
+              ${Object.entries(stats.nodeTypeCounts).map(([type, count]) => 
+                `<li>${type}: ${count}</li>`).join('')}
+            </ul>
+            <h3>Top Connected:</h3>
+            <ul>
+              ${stats.mostConnected.map(node => 
+                `<li>${node.name} (${node.type}): ${node.connections} connections</li>`).join('')}
+            </ul>
+          `;
+          
+          document.getElementById('stats-display').innerHTML = statsHtml;
+        } else {
+          console.error('Error loading statistics:', data);
+        }
+      } catch (error) {
+        console.error('Failed to load statistics:', error);
+      }
+    }
+    
+    // Load entities for sidebar
+    async function loadEntities() {
+      try {
+        const response = await fetch('/api/graph/search?query=');
+        const data = await response.json();
+        
+        if (data.success && data.results) {
+          const entitiesHtml = data.results.length > 0 
+            ? data.results.map(entity => `
+              <div class="entity-item" data-entity="${entity.name}">
+                <span class="node-type type-${entity.type.toLowerCase()}"></span>
+                ${entity.name} (${entity.type})
+              </div>
+            `).join('')
+            : '<p>No entities found. Add some memories!</p>';
+          
+          document.getElementById('entity-list').innerHTML = entitiesHtml;
+          
+          // Add click handlers to entities
+          document.querySelectorAll('.entity-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const entity = item.getAttribute('data-entity');
+              loadGraphData(entity);
+            });
+          });
+        } else {
+          console.error('Error loading entities:', data);
+        }
+      } catch (error) {
+        console.error('Failed to load entities:', error);
+      }
+    }
+    
+    // Add a test memory
+    async function addTestMemory() {
+      try {
+        const memories = [
+          "Had lunch with Sarah Johnson from Microsoft at Central Park. We discussed the AI conference in New York next month.",
+          "Met with John Smith from Google yesterday. He mentioned his team is working on a new project with Facebook.",
+          "Visited the Louvre Museum in Paris last summer. The Mona Lisa was smaller than I expected.",
+          "Had a call with the marketing team from Apple about our upcoming partnership.",
+          "Attended a conference at Stanford University where Elon Musk gave a talk about Tesla's new AI initiatives."
+        ];
+        
+        const randomMemory = memories[Math.floor(Math.random() * memories.length)];
+        
+        const response = await fetch('/api/memories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: randomMemory
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success || data.id) {
+          alert('Memory added successfully!');
+          // Refresh everything
+          loadGraphData();
+          loadStatistics();
+          loadEntities();
+        } else {
+          alert('Error adding memory');
+        }
+      } catch (error) {
+        console.error('Failed to add memory:', error);
+        alert('Error adding memory');
+      }
+    }
+    
+    // Search for entities
+    async function searchEntities() {
+      try {
+        const query = document.getElementById('search-input').value;
+        
+        if (!query) {
+          loadEntities();
+          return;
+        }
+        
+        const response = await fetch(`/api/graph/search?query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (data.success && data.results) {
+          const entitiesHtml = data.results.length > 0 
+            ? data.results.map(entity => `
+              <div class="entity-item" data-entity="${entity.name}">
+                <span class="node-type type-${entity.type.toLowerCase()}"></span>
+                ${entity.name} (${entity.type})
+              </div>
+            `).join('')
+            : '<p>No entities found matching your search.</p>';
+          
+          document.getElementById('entity-list').innerHTML = entitiesHtml;
+          
+          // Add click handlers to entities
+          document.querySelectorAll('.entity-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const entity = item.getAttribute('data-entity');
+              loadGraphData(entity);
+            });
+          });
+        } else {
+          console.error('Error searching entities:', data);
+        }
+      } catch (error) {
+        console.error('Failed to search entities:', error);
+      }
+    }
+    
+    // Event listeners
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      loadGraphData();
+      loadStatistics();
+      loadEntities();
+    });
+    
+    document.getElementById('add-memory-btn').addEventListener('click', addTestMemory);
+    
+    document.getElementById('search-btn').addEventListener('click', searchEntities);
+    
+    document.getElementById('search-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchEntities();
+      }
+    });
+    
+    // Initialize
+    loadGraphData();
+    loadStatistics();
+    loadEntities();
+    
+    // Network events
+    network.on('click', function(params) {
+      if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        const node = network.body.data.nodes.get(nodeId);
+        if (node) {
+          loadGraphData(node.label);
+        }
+      }
+    });
+  </script>
+</body>
+</html> 

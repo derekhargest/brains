@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki - Derek Brain</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="wiki-styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Derek Brain Wiki</h1>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/wiki.html" class="active">Wiki</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <div class="wiki-container">
+      <aside class="wiki-sidebar" id="wikiSidebar">
+        <div class="sidebar-header">
+          <h3>Wiki Pages</h3>
+          <button id="newPageBtn" class="btn-primary">New Page</button>
+        </div>
+        <div class="sidebar-search">
+          <input type="text" id="pageSearch" placeholder="Search pages...">
+        </div>
+        <ul class="page-list" id="pageList">
+          <!-- Pages will be loaded here -->
+          <li class="loading">Loading pages...</li>
+        </ul>
+      </aside>
+      
+      <main class="wiki-content" id="wikiContent">
+        <div class="wiki-toolbar">
+          <div class="wiki-breadcrumb" id="wikiBreadcrumb">
+            Wiki / <span id="currentPageTitle">Loading...</span>
+          </div>
+          <div class="wiki-actions" id="wikiActions">
+            <button id="editPageBtn" class="btn-secondary">Edit</button>
+            <button id="deletePageBtn" class="btn-danger">Delete</button>
+          </div>
+        </div>
+        
+        <div class="wiki-page-content" id="pageContent">
+          <!-- Page content will be loaded here -->
+          <div class="loading-content">
+            <p>Loading content...</p>
+          </div>
+        </div>
+        
+        <div class="wiki-edit-container" id="editContainer" style="display: none;">
+          <div class="edit-form">
+            <div class="form-group">
+              <label for="pageTitle">Title:</label>
+              <input type="text" id="pageTitle" class="page-title-input">
+            </div>
+            <div class="form-group">
+              <label for="pageSlug">URL Slug:</label>
+              <input type="text" id="pageSlug" class="page-slug-input">
+              <small>Leave empty to generate from title</small>
+            </div>
+            <div class="form-group">
+              <label for="markdownContent">Content (Markdown):</label>
+              <textarea id="markdownContent" class="markdown-editor" rows="15"></textarea>
+            </div>
+            <div class="edit-actions">
+              <button id="savePageBtn" class="btn-primary">Save</button>
+              <button id="cancelEditBtn" class="btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <footer>
+      <p>Derek Brain Wiki - For project documentation</p>
+    </footer>
+  </div>
+  
+  <script src="wiki.js"></script>
+</body>
+</html> 

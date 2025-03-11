@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brains!!! Data Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Brains!!! Data Generator</h1>
+    
+    <form id="generate-form">
+      <div class="form-group">
+        <label for="count-input">Number of items to generate:</label>
+        <input type="number" id="count-input" min="1" max="50" value="30">
+      </div>
+      
+      <div class="form-group">
+        <label>Types to focus on (optional):</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="types" value="calendar"> Calendar</label>
+          <label><input type="checkbox" name="types" value="task"> Tasks</label>
+          <label><input type="checkbox" name="types" value="project"> Projects</label>
+          <label><input type="checkbox" name="types" value="habit"> Habits</label>
+          <label><input type="checkbox" name="types" value="preference"> Preferences</label>
+          <label><input type="checkbox" name="types" value="contact"> Contacts</label>
+          <label><input type="checkbox" name="types" value="note"> Notes</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="subject-input">Subject Theme (optional):</label>
+        <input type="text" id="subject-input" placeholder="e.g., Sports, Software Development, Music Practice">
+        <small>Leave blank for general activities</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="persona-input">Persona (optional):</label>
+        <input type="text" id="persona-input" placeholder="e.g., Software Developer, College Student, Fitness Trainer">
+        <small>Character whose data is being generated</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="special-instructions">Special Instructions (optional):</label>
+        <textarea id="special-instructions" rows="3" placeholder="Any special requests for data generation (e.g., include more evening activities, focus on work-life balance)"></textarea>
+      </div>
+      
+      <button type="submit" class="btn primary">Generate Data</button>
+    </form>
+    
+    <div class="upload-section">
+      <h2>Or Upload Existing JSON Data</h2>
+      <div class="form-group">
+        <label for="file-upload">Select JSON file:</label>
+        <input type="file" id="file-upload" accept=".json">
+        <button id="upload-button" class="btn tertiary">Load File</button>
+      </div>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div id="data-display" class="data-container"></div>
+    
+    <button id="import-button" class="btn secondary" disabled>Import to Vector Store</button>
+    
+    <div class="visualization-container" id="visualization-section" style="display: none;">
+      <h2>Data Visualization</h2>
+      
+      <div class="chart-controls">
+        <select id="chart-type">
+          <option value="weekly-heatmap">Weekly Activity Heatmap</option>
+          <option value="time-distribution">Time-of-Day Distribution</option>
+          <option value="pattern-confidence">Pattern Confidence</option>
+          <option value="activity-timeline">Activity Timeline</option>
+        </select>
+        <button id="generate-visualization" class="btn primary">Generate Visualization</button>
+      </div>
+      
+      <div class="chart-wrapper">
+        <canvas id="visualization-chart"></canvas>
+      </div>
+      
+      <div id="pattern-analysis">
+        <h3>Detected Patterns</h3>
+        <div id="patterns-list">
+          <!-- Detected patterns will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="visualization.js"></script>
+  <script src="data-generator.js"></script>
+</body>
+</html> 

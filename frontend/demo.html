@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Brain Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+  <div class="demo-container">
+    <h1>Proactive Learning Demo</h1>
+    
+    <div class="demo-section">
+      <button onclick="runDemo()">Start Demo</button>
+      <button onclick="resetDemo()">Reset</button>
+    </div>
+
+    <div class="charts">
+      <div class="chart-container">
+        <canvas id="importanceChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="learningChart"></canvas>
+      </div>
+    </div>
+
+    <div id="network" style="height: 500px;"></div>
+  </div>
+
+  <script>
+    let demoNetwork = null;
+    
+    async function runDemo() {
+      // Generate test data
+      await fetch('/api/demo/init');
+      
+      // Simulate learning cycles
+      for (let i = 0; i < 5; i++) {
+        await new Promise(r => setTimeout(r, 2000));
+        await fetch('/api/demo/learn-cycle');
+      }
+      
+      // Update visualizations
+      updateCharts();
+      updateNetwork();
+    }
+
+    async function updateCharts() {
+      const res = await fetch('/api/memories');
+      const memories = await res.json();
+      
+      // Update importance chart
+      new Chart(document.getElementById('importanceChart'), {
+        type: 'line',
+        data: {
+          labels: memories.map(m => m.content.substring(0,20)),
+          datasets: [{
+            label: 'Memory Importance',
+            data: memories.map(m => m.metadata.importance),
+            borderColor: '#4CAF50'
+          }]
+        }
+      });
+    }
+
+    async function updateNetwork() {
+      const res = await fetch('/api/learning/patterns');
+      const { nodes, edges } = await res.json();
+      
+      demoNetwork = new vis.Network(
+        document.getElementById('network'),
+        { nodes, edges },
+        { physics: true }
+      );
+    }
+
+    async function resetDemo() {
+      await fetch('/api/demo/reset');
+      location.reload();
+    }
+  </script>
+</body>
+</html> 
